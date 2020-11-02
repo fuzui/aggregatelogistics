@@ -4,20 +4,20 @@ package net.kdks.enums;
 import java.util.stream.Stream;
 
 /**
- * Interface for value enum.
+ * 枚举接口.
  * 
- * @author: wangze
- * @date: 2020年9月19日 下午6:05:18
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public interface ValueEnum<T> {
 
     /**
-     * Converts value to corresponding enum.
+     * 枚举转换.
      *
-     * @param enumType enum type
-     * @param value    database value
-     * @param <V>      value generic
-     * @param <E>      enum generic
+     * @param enumType 类型
+     * @param value    值
+     * @param <V>      通用值
+     * @param <E>      通用枚举
      * @return corresponding enum
      */
     static <V, E extends ValueEnum<V>> E valueToEnum(Class<E> enumType, V value) {
@@ -29,7 +29,7 @@ public interface ValueEnum<T> {
     }
 
     /**
-     * Gets enum value.
+     * 获取枚举值.
      *
      * @return enum value
      */

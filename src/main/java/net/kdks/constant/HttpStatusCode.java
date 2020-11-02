@@ -1,9 +1,10 @@
 package net.kdks.constant;
 
 /**
- * http 状态码
- * @author wangze
- * @date 2020-10-10 16:30:40
+ * http状态码.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public interface HttpStatusCode {
 	/**

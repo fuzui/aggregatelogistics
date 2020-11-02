@@ -3,31 +3,81 @@ package net.kdks.model;
 import java.io.Serializable;
 
 /**
- * 物流查询入参
- * @ApplicationName: tnschool-server-common-core
- * @Title: LogisticsParam.java
- * @Package: cn.topnew.school.common.core.result.logistics
- * @author: wang ze
- * @date: 2020年9月17日 下午6:08:07
+ * 下单参数.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class CreateOrderParam implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 快递公司官方简称
+	 * 物品信息
 	 */
 	private CargoDetail cargoDetail;
 	
 	/**
-	 * 	快递号
+	 * 发件人信息
 	 */
-	private String expressNo;
+	private ContactInfo sendContactInfo;
+	
+	/**
+	 * 收件人信息
+	 */
+	private ContactInfo receiptContactInfo;
 
 	/**
 	 * 手机号
 	 */
-	private String mobile;
+	private String orderId;
+
+	public CargoDetail getCargoDetail() {
+		return cargoDetail;
+	}
+
+	public void setCargoDetail(CargoDetail cargoDetail) {
+		this.cargoDetail = cargoDetail;
+	}
+
+	public ContactInfo getSendContactInfo() {
+		return sendContactInfo;
+	}
+
+	public void setSendContactInfo(ContactInfo sendContactInfo) {
+		this.sendContactInfo = sendContactInfo;
+	}
+
+	public ContactInfo getReceiptContactInfo() {
+		return receiptContactInfo;
+	}
+
+	public void setReceiptContactInfo(ContactInfo receiptContactInfo) {
+		this.receiptContactInfo = receiptContactInfo;
+	}
+
+	public String getOrderId() {
+		return orderId;
+	}
+
+	public void setOrderId(String orderId) {
+		this.orderId = orderId;
+	}
+
+	public static long getSerialversionuid() {
+		return serialVersionUID;
+	}
+
+	@Override
+	public String toString() {
+		return "CreateOrderParam [cargoDetail=" + cargoDetail + ", sendContactInfo=" + sendContactInfo
+				+ ", receiptContactInfo=" + receiptContactInfo + ", orderId=" + orderId + ", getCargoDetail()="
+				+ getCargoDetail() + ", getSendContactInfo()=" + getSendContactInfo() + ", getReceiptContactInfo()="
+				+ getReceiptContactInfo() + ", getOrderId()=" + getOrderId() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + ", toString()=" + super.toString() + "]";
+	}
+	
+	
 
 	
 

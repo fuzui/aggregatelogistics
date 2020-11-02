@@ -3,12 +3,10 @@ package net.kdks.model;
 import java.io.Serializable;
 
 /**
- * 物流查询入参
- * @ApplicationName: tnschool-server-common-core
- * @Title: LogisticsParam.java
- * @Package: cn.topnew.school.common.core.result.logistics
- * @author: wang ze
- * @date: 2020年9月17日 下午6:08:07
+ * 物流查询入参.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressParam implements Serializable {
 

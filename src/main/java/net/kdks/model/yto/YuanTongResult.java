@@ -1,22 +1,27 @@
 package net.kdks.model.yto;
 
+import com.alibaba.fastjson.annotation.JSONField;
+
 import net.kdks.constant.YuantongScanType;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.ExpressData;
 import net.kdks.utils.DateUtils;
+
 /**
- * 圆通返回结果
- * @author wangze
- * @date 2020-10-11 22:31:54
+ * 路由信息.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class YuanTongResult extends ExpressData {
 	private static final long serialVersionUID = 1L;
-
-	public void setWaybill_No(String waybillNo) {
+	@JSONField(name = "waybill_No")
+	public void setWaybillNo(String waybillNo) {
 		super.setAreaName(null);
 	}
 	
-	public void setUpload_Time(String uploadTime) {
+	@JSONField(name = "upload_Time")
+	public void setUploadTime(String uploadTime) {
 		super.setTime(DateUtils.strToTimestamp(uploadTime));
 		super.setFtime(uploadTime);
 	}

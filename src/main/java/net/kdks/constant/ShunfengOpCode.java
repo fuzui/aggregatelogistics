@@ -1,9 +1,10 @@
 package net.kdks.constant;
 
 /**
- * 顺丰路由信息操作码
- * @author wangze
- * @date 2020-10-10 16:22:10
+ * 顺丰路由状态.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public interface ShunfengOpCode {
 	/**

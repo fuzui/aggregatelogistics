@@ -14,12 +14,12 @@ import com.alibaba.fastjson.TypeReference;
 
 import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
-import net.kdks.config.ShentongConfig;
 import net.kdks.config.YuantongConfig;
 import net.kdks.constant.CommonConstant;
 import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
+import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
 import net.kdks.model.ExpressResult;
@@ -31,10 +31,10 @@ import net.kdks.utils.DigestUtils;
 import net.kdks.utils.StringUtils;
 
 /**
- * 圆通快递
+ * 圆通.
  * 
- * @author: wangze
- * @date: 2020年9月22日 下午1:13:39
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressYuantongHandler implements ExpressHandler {
 
@@ -44,6 +44,12 @@ public class ExpressYuantongHandler implements ExpressHandler {
 		this.yuantongConfig = yuantongConfig;
 	}
 	
+	/**
+     * 查询轨迹信息
+     * 
+     * @param expressParam	快递号、手机、快递公司编码
+     * @return 查询接口
+     */
     @Override
     public ExpressResult getExpressInfo(ExpressParam expressParam) {
     	
@@ -61,9 +67,9 @@ public class ExpressYuantongHandler implements ExpressHandler {
         String v = "1";
         String timestamp = DateUtils.currentTimeStr();
         
-        Map<String, Object> paramMap = new HashMap<>();
+        Map<String, Object> paramMap = new HashMap<>(8);
         Map<String, Object>[] paramItemsMap = new Map[1];
-        paramItemsMap[0] = new HashMap<>();
+        paramItemsMap[0] = new HashMap<>(1);
 		String expressNo = expressParam.getExpressNo();
 		paramItemsMap[0].put("Number", expressNo);
 		String param = null;
@@ -89,7 +95,7 @@ public class ExpressYuantongHandler implements ExpressHandler {
 			.append("user_id").append(userId)
 			.append("v").append(v);
 		
-		String dataDigest = StringUtils.strTo16(DigestUtils.Md5(beforeDigestStr.toString()));
+		String dataDigest = StringUtils.strTo16(DigestUtils.md5Digest(beforeDigestStr.toString()));
 		paramMap.put("sign", dataDigest.toUpperCase());
 		
 		String responseData = HttpRequest.post(requestUrl)
@@ -149,12 +155,21 @@ public class ExpressYuantongHandler implements ExpressHandler {
 		return expressResult;
 	}
 	
+	/**
+     * 创建订单
+     * @param createOrderParam	下单参数，主要包含物品信息、收件人信息、寄件人信息等
+     * @return	快递单号等信息
+     */
 	@Override
-	public OrderResult createOrder() {
+	public OrderResult createOrder(CreateOrderParam createOrderParam) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+     * 获取当前快递公司编码
+     * @return 快递公司编码
+     */
     @Override
     public String getExpressCompanyCode() {
     	return ExpressCompanyCodeEnum.YTO.getValue();

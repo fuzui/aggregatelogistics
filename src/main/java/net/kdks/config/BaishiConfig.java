@@ -1,5 +1,14 @@
 package net.kdks.config;
 
+/**
+ * 百世快递配置.
+ * 
+ * <p>API配置,包含[partnerID,secretKey],isProduct标识测试与生成<br>
+ * 配置获取:<em><a href="https://open.800best.com/">百世开放平台</a></em>
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
+ */
 public class BaishiConfig {
 	
 	private BaishiConfig(Builder builder) {

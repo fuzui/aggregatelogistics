@@ -1,5 +1,14 @@
 package net.kdks.config;
 
+/**
+ * 圆通快递配置.
+ * 
+ * <p>API配置,包含[partnerID,secretKey,userId],isProduct标识测试与生产环境<br>
+ * 配置获取:<em><a href="http://open.yto.net.cn/">圆通开放平台</a></em>
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
+ */
 public class YuantongConfig {
 	
 	private YuantongConfig(Builder builder) {

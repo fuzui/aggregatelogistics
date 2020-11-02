@@ -6,12 +6,10 @@ import java.util.List;
 import com.alibaba.fastjson.JSONObject;
 
 /**
- * 快递100返回信息
- * @ApplicationName: tnschool-server-common-core
- * @Title: Kuaidi100Result.java
- * @Package: cn.topnew.school.common.core.result.logistics
- * @author: wang ze
- * @date: 2020年9月17日 下午4:38:46
+ * 物流查询结果.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressResult implements Serializable {
 

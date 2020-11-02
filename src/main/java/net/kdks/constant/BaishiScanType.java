@@ -1,9 +1,10 @@
 package net.kdks.constant;
 
 /**
- * 百世路由操作
- * @author wangze
- * @date 2020-10-10 18:44:59
+ * 百世路由状态.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public interface BaishiScanType {
 	/**

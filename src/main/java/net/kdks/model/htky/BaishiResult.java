@@ -1,13 +1,15 @@
 package net.kdks.model.htky;
 
 import java.util.List;
+
 /**
- * 百世查询结果
- * @author wangze
- * @date 2020-10-10 19:11:55
+ * 百世轨迹查询结果.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class BaishiResult {
-	/*
+	/**
 	 * 结果描述，true成功，false失败
 	 */
 	private Boolean result;

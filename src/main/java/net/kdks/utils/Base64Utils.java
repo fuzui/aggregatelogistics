@@ -4,10 +4,10 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 
 /**
- * Base64编码
- *
- * @author looly
- * @since 3.2.0
+ * Base64编码.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class Base64Utils {
 
@@ -15,31 +15,29 @@ public class Base64Utils {
     /**
      * 标准编码表
      */
-    private static final byte[] STANDARD_ENCODE_TABLE = { //
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', //
-        'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', //
-        'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', //
-        'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', //
-        'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', //
-        'o', 'p', 'q', 'r', 's', 't', 'u', 'v', //
-        'w', 'x', 'y', 'z', '0', '1', '2', '3', //
-        '4', '5', '6', '7', '8', '9', '+', '/' //
+    private static final byte[] STANDARD_ENCODE_TABLE = {
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+        'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+        'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+        'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+        'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+        'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+        'w', 'x', 'y', 'z', '0', '1', '2', '3',
+        '4', '5', '6', '7', '8', '9', '+', '/'
     };
     /**
      * URL安全的编码表，将 + 和 / 替换为 - 和 _
      */
-    private static final byte[] URL_SAFE_ENCODE_TABLE = { //
-        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', //
-        'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', //
-        'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', //
-        'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f', //
-        'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', //
-        'o', 'p', 'q', 'r', 's', 't', 'u', 'v', //
-        'w', 'x', 'y', 'z', '0', '1', '2', '3', //
-        '4', '5', '6', '7', '8', '9', '-', '_' //
+    private static final byte[] URL_SAFE_ENCODE_TABLE = {
+        'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H',
+        'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P',
+        'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X',
+        'Y', 'Z', 'a', 'b', 'c', 'd', 'e', 'f',
+        'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n',
+        'o', 'p', 'q', 'r', 's', 't', 'u', 'v',
+        'w', 'x', 'y', 'z', '0', '1', '2', '3',
+        '4', '5', '6', '7', '8', '9', '-', '_'
     };
-
-    // -------------------------------------------------------------------- encode
 
     /**
      * 编码为Base64，非URL安全的
@@ -170,7 +168,8 @@ public class Base64Utils {
             }
         }
 
-        int left = len - evenlen;// 剩余位数
+        // 剩余位数
+        int left = len - evenlen;
         if (left > 0) {
             int i = ((arr[evenlen] & 0xff) << 10) | (left == 2 ? ((arr[len - 1] & 0xff) << 2) : 0);
 
@@ -180,7 +179,8 @@ public class Base64Utils {
             if (isUrlSafe) {
                 // 在URL Safe模式下，=为URL中的关键字符，不需要补充。空余的byte位要去掉。
                 int urlSafeLen = destlen - 2;
-                if (2 == left) {
+                int leftFlag = 2;
+                if (left == leftFlag) {
                     dest[destlen - 2] = encodeTable[i & 0x3f];
                     urlSafeLen += 1;
                 }

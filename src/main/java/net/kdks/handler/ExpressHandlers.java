@@ -5,20 +5,21 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import net.kdks.config.ExpressConfig;
 import net.kdks.enums.ExpressCompanyCodeEnum;
+import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressParam;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 
 /**
- * express handler manager.
+ * 业务处理.
  * 
- * @author: wangze
- * @date: 2020年9月19日 下午6:15:18
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressHandlers {
 
     /**
-     * express handler container.
+     * 快递公司实例
      */
     private final ConcurrentHashMap<String, ExpressHandler> expressHandlers = new ConcurrentHashMap<>(16);
 
@@ -27,24 +28,28 @@ public class ExpressHandlers {
     	expressHandlers.put("STO", new ExpressShentongHandler(expressConfig.getShentongConfig()));
     	expressHandlers.put("YTO", new ExpressYuantongHandler(expressConfig.getYuantongConfig()));
     	expressHandlers.put("ZTO", new ExpressZhongtongHandler(expressConfig.getZhongtongConfig()));
-    	expressHandlers.put("YD", new ExpressYundaHandler());
     	expressHandlers.put("HTKY", new ExpressBaishiHandler(expressConfig.getBaishiConfig()));
     	expressHandlers.put("SF", new ExpressShunfengHandler(expressConfig.getShunfengConfig()));
     }
 
     /**
-     * get express info.
-     *
-     * @param expressParam expressParam must not be null
-     * @param expressCompanyCode expressCompanyCode must not be null
-     * @return express result
+     * 查询轨迹信息
+     * 
+     * @param expressParam	快递号、手机、快递公司编码
+     * @param expressCompanyCode	快递公司编码
+     * @return 查询接口
      */
     public ExpressResult getExpressInfo(ExpressParam expressParam, String expressCompanyCode) {
         return getSupportedCode(expressCompanyCode).getExpressInfo(expressParam);
     }
-    
-    public OrderResult createOrder(String expressCompanyCode) {
-    	return getSupportedCode(expressCompanyCode).createOrder();
+    /**
+     * 创建订单
+     * @param createOrderParam	下单参数，主要包含物品信息、收件人信息、寄件人信息等
+     * @param expressCompanyCode	快递公司编码
+     * @return	快递单号等信息
+     */
+    public OrderResult createOrder(CreateOrderParam createOrderParam, String expressCompanyCode) {
+    	return getSupportedCode(expressCompanyCode).createOrder(createOrderParam);
     }
 
     /**

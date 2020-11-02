@@ -1,8 +1,10 @@
 package net.kdks.model.htky;
+
 /**
- * 百世流转信息
- * @author wangze
- * @date 2020-10-10 19:04:59
+ * 流转信息.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class BaishiTraceLog {
 	/**

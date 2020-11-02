@@ -4,9 +4,10 @@ import java.util.List;
 import java.util.Map;
 
 /**
- * 申通返回结果
- * @author wangze
- * @date 2020-10-10 16:54:38
+ * 申通轨迹查询结果.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ShentongResult {
 	/**

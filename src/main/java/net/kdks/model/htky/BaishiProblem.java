@@ -3,9 +3,10 @@ package net.kdks.model.htky;
 import java.util.List;
 
 /**
- * 问题件
- * @author wangze
- * @date 2020-10-10 19:01:22
+ * 问题件.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class BaishiProblem {
 	/**

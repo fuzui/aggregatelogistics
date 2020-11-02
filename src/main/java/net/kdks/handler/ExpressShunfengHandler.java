@@ -17,20 +17,22 @@ import net.kdks.constant.CommonConstant;
 import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
+import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 import net.kdks.model.sf.Route;
 import net.kdks.model.sf.ShunfengResult;
+import net.kdks.model.sf.WaybillNoInfo;
 import net.kdks.utils.DateUtils;
 import net.kdks.utils.DigestUtils;
 
 /**
- * 顺丰快递
+ * 顺丰.
  * 
- * @author: wangze
- * @date: 2020年9月22日 下午1:13:39
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressShunfengHandler implements ExpressHandler {
 
@@ -39,11 +41,18 @@ public class ExpressShunfengHandler implements ExpressHandler {
 	public ExpressShunfengHandler(ShunfengConfig shunfengConfig) {
 		this.shunfengConfig = shunfengConfig;
 	}
+	
+	/**
+     * 查询轨迹信息
+     * 
+     * @param expressParam	快递号、手机、快递公司编码
+     * @return 查询接口
+     */
     @Override
     public ExpressResult getExpressInfo(ExpressParam expressParam) {
     	String requestUrl = getRequestUrl();
         String serviceCode = "EXP_RECE_SEARCH_ROUTES";
-        Map<String, Object> paramItemsMap = new HashMap<>();
+        Map<String, Object> paramItemsMap = new HashMap<>(5);
 		String[] expressNo = {expressParam.getExpressNo()};
 		paramItemsMap.put("checkPhoneNo", expressParam.getMobile());
 		paramItemsMap.put("methodType", "1");
@@ -70,7 +79,8 @@ public class ExpressShunfengHandler implements ExpressHandler {
 		expressResult.setOriginalResult(responseData);
 		expressResult.setCom(ExpressCompanyCodeEnum.SF.getValue());
 		expressResult.setNu(expressNo);
-		if(result.getApiResultCode().equals("A1000")) {
+		String successFlag = "A1000";
+		if(successFlag.equals(result.getApiResultCode())) {
 			if(result.getApiResultData().getSuccess()) {
 				
 				expressResult.setStatus(HttpStatusCode.SUCCESS);
@@ -95,53 +105,35 @@ public class ExpressShunfengHandler implements ExpressHandler {
         return expressResult;
     }
 
+    /**
+     * 创建订单
+     * @param createOrderParam	下单参数，主要包含物品信息、收件人信息、寄件人信息等
+     * @return	快递单号等信息
+     */
     @Override
-	public OrderResult createOrder() {
+	public OrderResult createOrder(CreateOrderParam createOrderParam) {
     	String requestUrl = getRequestUrl();
     	
         String serviceCode = "EXP_RECE_CREATE_ORDER";
-        Map<String, Object> paramItemsMap = new HashMap<>();
-        Map<String, Object> cargoDetailsMap = new HashMap<>();
-        
-        cargoDetailsMap.put("count", 2.365);
-        cargoDetailsMap.put("unit", "个");
-        cargoDetailsMap.put("weight", 6.1);
-        cargoDetailsMap.put("amount", 100.5111);
-        cargoDetailsMap.put("currency", "HKD");
-        cargoDetailsMap.put("name", "测试衣服1");
+        Map<String, Object> paramItemsMap = new HashMap<>(4);
+        Map<String, Object> cargoDetailsMap = JSON.parseObject(JSON.toJSONString(createOrderParam.getCargoDetail()), HashMap.class);
         cargoDetailsMap.put("sourceArea", "CHN");
         
         List<Map<String, Object>> cargoDetailsList = new ArrayList<Map<String, Object>>();
         cargoDetailsList.add(cargoDetailsMap);
         
         List<Map<String, Object>> contactInfoList = new ArrayList<Map<String, Object>>();
-        Map<String, Object> contactInfoSendMap = new HashMap<>();
+        Map<String, Object> contactInfoSendMap = JSON.parseObject(JSON.toJSONString(createOrderParam.getSendContactInfo()), HashMap.class);
         contactInfoSendMap.put("contactType", 1);
-        contactInfoSendMap.put("contact", "小曾");
-        contactInfoSendMap.put("postCode", "580058");
-        contactInfoSendMap.put("province", "北京市");
-        contactInfoSendMap.put("city", "北京市");
-        contactInfoSendMap.put("county", "通州区");
-        contactInfoSendMap.put("address", "软件产业基地11栋");
-        contactInfoSendMap.put("tel", "4006789888");
         contactInfoSendMap.put("country", "CN");
-    	Map<String, Object> contactInfoReceiptMap = new HashMap<>();
+    	Map<String, Object> contactInfoReceiptMap = JSON.parseObject(JSON.toJSONString(createOrderParam.getReceiptContactInfo()), HashMap.class);
     	contactInfoReceiptMap.put("contactType", 2);
-    	contactInfoReceiptMap.put("company", "顺丰速运");
-    	contactInfoReceiptMap.put("contact", "小邱");
-    	contactInfoReceiptMap.put("tel", "15555542203");
-    	contactInfoReceiptMap.put("province", "山西省");
-    	contactInfoReceiptMap.put("city", "晋城市");
-    	contactInfoReceiptMap.put("county", "高平市");
-    	contactInfoReceiptMap.put("address", "湖北大厦");
-    	contactInfoReceiptMap.put("postCode", "580058");
-    	contactInfoReceiptMap.put("tel", "18810840728");
     	contactInfoReceiptMap.put("country", "CN");	
         contactInfoList.add(contactInfoSendMap);
         contactInfoList.add(contactInfoReceiptMap);
         
 		paramItemsMap.put("language", "zh-CN");
-		paramItemsMap.put("orderId", "jksdtestdev0002");
+		paramItemsMap.put("orderId", createOrderParam.getOrderId());
 		paramItemsMap.put("cargoDetails", cargoDetailsList);
 		paramItemsMap.put("contactInfoList", contactInfoList);
 		Map<String, Object> paramMap = getBaseParam(serviceCode, paramItemsMap);
@@ -152,11 +144,39 @@ public class ExpressShunfengHandler implements ExpressHandler {
 			    .execute().body();
         
     	System.out.println(responseData);
-		return null;
+		return disposeCreateOrderResult(responseData, createOrderParam.getOrderId());
 	}
     
+    /**
+     * 结果处理
+     * @param responseData
+     * @return
+     */
+    private OrderResult disposeCreateOrderResult(String responseData, String orderId) {
+    	OrderResult orderResult = new OrderResult();
+    	orderResult.setOrderId(orderId);
+    	ShunfengResult result = JSON.parseObject(responseData, ShunfengResult.class);
+		String successFlag = "A1000";
+		if(successFlag.equals(result.getApiResultCode())) {
+			if(result.getApiResultData().getSuccess()) {
+				orderResult.setStatus(HttpStatusCode.SUCCESS);
+				List<WaybillNoInfo> waybillNoInfoList = result.getApiResultData().getMsgData().getWaybillNoInfoList();
+				if(waybillNoInfoList != null && waybillNoInfoList.size() != 0) {
+					orderResult.setExpressNo(waybillNoInfoList.get(0).getWaybillNo());
+				}
+			}else {
+				orderResult.setStatus(HttpStatusCode.EXCEPTION);
+				orderResult.setMessage(result.getApiResultData().getErrorMsg());
+			}
+		}else {
+			orderResult.setStatus(HttpStatusCode.EXCEPTION);
+			orderResult.setMessage(result.getApiErrorMsg());
+		}
+        return orderResult;
+    }
+    
     private String getRequestUrl() {
-    	String requestUrl = "https://sfapi-sbox.sf-express.com/std/service";
+    	String requestUrl = "https://sfapi.sf-express.com/std/service";
     	if(shunfengConfig.getIsProduct() == 0) {
     		requestUrl = "https://sfapi-sbox.sf-express.com/std/service";
     	}
@@ -164,7 +184,7 @@ public class ExpressShunfengHandler implements ExpressHandler {
     }
     
     private Map<String, Object> getBaseParam(String serviceCode,Map<String, Object> paramItemsMap){
-    	Map<String, Object> paramMap = new HashMap<>();
+    	Map<String, Object> paramMap = new HashMap<>(6);
     	String partnerID = shunfengConfig.getPartnerID();
         String requestID = shunfengConfig.getRequestID();
         Long timestamp = DateUtils.currentTimeMillis();
@@ -184,11 +204,15 @@ public class ExpressShunfengHandler implements ExpressHandler {
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		msgDigest = Base64.getEncoder().encodeToString(DigestUtils.Md5(msgDigest));
+		msgDigest = Base64.getEncoder().encodeToString(DigestUtils.md5Digest(msgDigest));
 		paramMap.put("msgDigest", msgDigest);
 		return paramMap;
     }
     
+    /**
+     * 获取当前快递公司编码
+     * @return 快递公司编码
+     */
     @Override
     public String getExpressCompanyCode() {
     	return ExpressCompanyCodeEnum.SF.getValue();

@@ -5,6 +5,12 @@ import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.ExpressData;
 import net.kdks.utils.DateUtils;
 
+/**
+ * 路由信息.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
+ */
 public class ZhongtongTrace extends ExpressData {
 	private static final long serialVersionUID = 1L;
 

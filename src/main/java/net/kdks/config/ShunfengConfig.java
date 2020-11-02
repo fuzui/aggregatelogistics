@@ -1,5 +1,14 @@
 package net.kdks.config;
 
+/**
+ * 顺丰快递配置.
+ * 
+ * <p>API配置,包含[partnerID,requestID,checkWord],isProduct标识测试与生产环境<br>
+ * 配置获取:<em><a href="http://qiao.sf-express.com/">顺丰开放平台</a></em>
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
+ */
 public class ShunfengConfig {
 	
 	private ShunfengConfig(Builder builder) {

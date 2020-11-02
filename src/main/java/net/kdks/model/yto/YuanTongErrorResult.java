@@ -2,10 +2,12 @@ package net.kdks.model.yto;
 
 import java.util.List;
 import java.util.Map;
+
 /**
- * 圆通返回错误结果
- * @author wangze
- * @date 2020-10-11 22:31:54
+ * 圆通轨迹查询错误信息.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class YuanTongErrorResult {
 	

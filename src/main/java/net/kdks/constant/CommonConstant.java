@@ -1,9 +1,10 @@
 package net.kdks.constant;
 
 /**
- * 通用常量
- * @author wangze
- * @date 2020-10-10 16:27:02
+ * 通用状态、常量.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public interface CommonConstant {
 	/**

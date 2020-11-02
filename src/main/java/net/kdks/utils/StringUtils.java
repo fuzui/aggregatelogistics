@@ -7,8 +7,10 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 /**
- * @author yadong.zhang (yadong.zhang0415(a)gmail.com)
- * @since 1.0.0
+ * 字符串处理.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class StringUtils {
 
@@ -122,8 +124,8 @@ public class StringUtils {
   }
     /**
      * 字符串转换成为16进制(无需Unicode编码)
-     * @param str
-     * @return
+     * @param bs	字符串字节数组
+     * @return	16进制字符串
      */
     public static String strTo16(byte[] bs) {
         char[] chars = "0123456789ABCDEF".toCharArray();

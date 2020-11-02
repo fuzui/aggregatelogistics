@@ -3,9 +3,10 @@ package net.kdks.model.htky;
 import java.util.List;
 
 /**
- * 流转信息
- * @author wangze
- * @date 2020-10-10 19:07:25
+ * 流转信息.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class BaishiTrace {
 	/**

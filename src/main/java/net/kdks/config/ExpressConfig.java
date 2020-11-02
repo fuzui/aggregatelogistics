@@ -1,5 +1,23 @@
 package net.kdks.config;
 
+/**
+ * 聚合快递配置.
+ * 
+ * <p>包含顺丰、申通、百世、圆通、中通.
+ * <pre>
+ * 		ExpressConfig config = ExpressConfig.builder()
+				.shunfengConfig("partnerID","requestID","checkWord",1)
+				.shentongConfig("appkey", "secretKey", 1)
+				.baishiConfig("partnerID", "partnerID", 1)
+				.yuantongConfig("appkey", "secretKey", "userId")
+				.zhongtongConfig("companyId", "secretKey", 0)
+				.build();
+		ExpressHandlers expressHandlers = new ExpressHandlers(config);
+ * </pre>
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
+ */
 public class ExpressConfig {
 	
 	private ExpressConfig(Builder builder) {
@@ -80,7 +98,7 @@ public class ExpressConfig {
 		 * @param partnerID
 		 * @param requestID
 		 * @param checkWord
-		 * @return
+		 * @return Builder
 		 */
         public Builder shunfengConfig(String partnerID,String requestID,String checkWord) {
             this.shunfengConfig = ShunfengConfig.builder()
@@ -104,7 +122,7 @@ public class ExpressConfig {
          * 申通
          * @param appkey
          * @param secretKey
-         * @return
+         * @return Builder
          */
         public Builder shentongConfig(String appkey, String secretKey) {
         	this.shentongConfig = ShentongConfig.builder()
@@ -126,7 +144,7 @@ public class ExpressConfig {
          * 百世
          * @param partnerID
          * @param secretKey
-         * @return
+         * @return Builder
          */
         public Builder baishiConfig(String partnerID, String secretKey) {
         	this.baishiConfig = BaishiConfig.builder()
@@ -149,7 +167,7 @@ public class ExpressConfig {
          * @param appkey
          * @param secretKey
          * @param userId
-         * @return
+         * @return Builder
          */
         public Builder yuantongConfig(String appkey, String secretKey, String userId) {
         	this.yuantongConfig = YuantongConfig.builder()
@@ -171,9 +189,9 @@ public class ExpressConfig {
         
         /**
          * 中通
-         * @param appkey
+         * @param companyId
          * @param secretKey
-         * @return
+         * @return Builder
          */
         public Builder zhongtongConfig(String companyId, String secretKey) {
         	this.zhongtongConfig = ZhongtongConfig.builder()

@@ -1,9 +1,10 @@
 package net.kdks.enums;
 
 /**
- * 快递状态
- * @author wangze
- * @date 2020-10-10 15:52:04
+ * 快递查询状态.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public enum ExpressStateEnum implements ValueEnum<Integer> {
 

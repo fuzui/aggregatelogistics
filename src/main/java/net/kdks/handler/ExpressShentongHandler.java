@@ -15,6 +15,7 @@ import net.kdks.constant.CommonConstant;
 import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
+import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
 import net.kdks.model.ExpressResult;
@@ -24,10 +25,10 @@ import net.kdks.model.sto.ShentongRoute;
 import net.kdks.utils.DigestUtils;
 
 /**
- * 申通
+ * 申通.
  * 
- * @author: wangze
- * @date: 2020年9月20日 下午6:47:14
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressShentongHandler implements ExpressHandler {
 
@@ -37,6 +38,12 @@ public class ExpressShentongHandler implements ExpressHandler {
 		this.shentongConfig = shentongConfig;
 	}
 	
+	/**
+     * 查询轨迹信息
+     * 
+     * @param expressParam	快递号、手机、快递公司编码
+     * @return 查询接口
+     */
 	@Override
 	public ExpressResult getExpressInfo(ExpressParam expressParam) {
 		String requestUrl = "https://cloudinter-linkgatewayonline.sto.cn/gateway/link.do";
@@ -47,14 +54,14 @@ public class ExpressShentongHandler implements ExpressHandler {
 		String appkey = shentongConfig.getAppkey();
 		String code = shentongConfig.getAppkey();
 
-		Map<String, Object> paramMap = new HashMap<>();
-		Map<String, Object> paramsItem = new HashMap<>();
+		Map<String, Object> paramMap = new HashMap<>(7);
+		Map<String, Object> paramsItem = new HashMap<>(2);
 		String[] expressNo = { expressParam.getExpressNo() };
 		paramsItem.put("order", "desc");
 		paramsItem.put("waybillNoList", expressNo);
 
 		String beforeDigestStr = JSON.toJSONString(paramsItem) + secretKey;
-		String dataDigest = Base64.getEncoder().encodeToString(DigestUtils.Md5(beforeDigestStr));
+		String dataDigest = Base64.getEncoder().encodeToString(DigestUtils.md5Digest(beforeDigestStr));
 		paramMap.put("content", JSON.toJSONString(paramsItem));
 		paramMap.put("api_name", "STO_TRACE_QUERY_COMMON");
 		paramMap.put("from_appkey", appkey);
@@ -118,12 +125,21 @@ public class ExpressShentongHandler implements ExpressHandler {
 		return expressResult;
 	}
 	
+	/**
+     * 创建订单
+     * @param createOrderParam	下单参数，主要包含物品信息、收件人信息、寄件人信息等
+     * @return	快递单号等信息
+     */
 	@Override
-	public OrderResult createOrder() {
+	public OrderResult createOrder(CreateOrderParam createOrderParam) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+	/**
+     * 获取当前快递公司编码
+     * @return 快递公司编码
+     */
 	@Override
 	public String getExpressCompanyCode() {
 		return ExpressCompanyCodeEnum.STO.getValue();

@@ -1,8 +1,10 @@
 package net.kdks.model.htky;
+
 /**
- * 百世问题子项
- * @author wangze
- * @date 2020-10-10 19:01:12
+ * 问题件子项.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class BaishiProblemItems {
 	/**

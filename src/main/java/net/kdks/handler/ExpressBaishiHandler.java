@@ -14,6 +14,7 @@ import net.kdks.constant.CommonConstant;
 import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
+import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
 import net.kdks.model.ExpressResult;
@@ -24,10 +25,10 @@ import net.kdks.utils.DigestUtils;
 import net.kdks.utils.StringUtils;
 
 /**
- * 百世快递业务实现
+ * 百世.
  * 
- * @author: wangze
- * @date: 2020年9月22日 下午6:08:44
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressBaishiHandler implements ExpressHandler {
 
@@ -37,6 +38,12 @@ public class ExpressBaishiHandler implements ExpressHandler {
 		this.baishiConfig = baishiConfig;
 	}
 	
+	/**
+     * 查询轨迹信息
+     * 
+     * @param expressParam	快递号、手机、快递公司编码
+     * @return 查询接口
+     */
     @Override
     public ExpressResult getExpressInfo(ExpressParam expressParam) {
         String requestUrl = "http://edi-q9.ns.800best.com/kd/api/process";
@@ -50,9 +57,9 @@ public class ExpressBaishiHandler implements ExpressHandler {
         String messageType = "JSON";
         
         
-        HashMap<String, Object> paramMap = new HashMap<>();
-        HashMap<String, Object> paramItemsMap = new HashMap<>();
-        HashMap<String, Object> paramItems = new HashMap<>();
+        HashMap<String, Object> paramMap = new HashMap<>(5);
+        HashMap<String, Object> paramItemsMap = new HashMap<>(1);
+        HashMap<String, Object> paramItems = new HashMap<>(1);
         String[] expressNo = {expressParam.getExpressNo()};
         paramItems.put("mailNo", expressNo);
         paramItemsMap.put("mailNos", paramItems);
@@ -63,10 +70,10 @@ public class ExpressBaishiHandler implements ExpressHandler {
 		paramMap.put("messageType", messageType);
 		
 		String beforeDigestStr = bizData+secretKey;
-		String sign = StringUtils.strTo16(DigestUtils.Md5(beforeDigestStr));
+		String sign = StringUtils.strTo16(DigestUtils.md5Digest(beforeDigestStr));
 		paramMap.put("sign", sign.toLowerCase());
 		
-		Map<String,String> requestHeader = new HashMap<String,String>();
+		Map<String,String> requestHeader = new HashMap<String,String>(1);
 		
 		requestHeader.put("ContentType", "application/x-www-form-urlencoded");
 		String responseData = HttpRequest.post(requestUrl)
@@ -112,12 +119,21 @@ public class ExpressBaishiHandler implements ExpressHandler {
 		return expressResult;
 	}
 
+	/**
+     * 创建订单
+     * @param createOrderParam	下单参数，主要包含物品信息、收件人信息、寄件人信息等
+     * @return	快递单号等信息
+     */
 	@Override
-	public OrderResult createOrder() {
+	public OrderResult createOrder(CreateOrderParam createOrderParam) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 	
+	/**
+     * 获取当前快递公司编码
+     * @return 快递公司编码
+     */
     @Override
     public String getExpressCompanyCode() {
         return ExpressCompanyCodeEnum.HTKY.getValue();

@@ -5,10 +5,10 @@ import java.io.Serializable;
 
 
 /**
- * 响应信息主体
- *
- * @param <T>
- * @author lengleng
+ * 路由信息.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressData implements Serializable {
 

@@ -1,14 +1,12 @@
 package net.kdks.model.zto;
 
 import java.util.List;
-import java.util.Map;
-
-import net.kdks.model.sto.ShentongRoute;
 
 /**
- * 申通返回结果
- * @author wangze
- * @date 2020-10-10 16:54:38
+ * 中通轨迹查询数据.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ZhongtongData {
 	/**

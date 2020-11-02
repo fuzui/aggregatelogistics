@@ -15,6 +15,7 @@ import net.kdks.constant.CommonConstant;
 import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
+import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
 import net.kdks.model.ExpressResult;
@@ -26,9 +27,10 @@ import net.kdks.utils.DigestUtils;
 import net.kdks.utils.StringUtils;
 
 /**
- * 中通
- * @author wangze
- * @date 2020-10-11 22:14:10
+ * 中通.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class ExpressZhongtongHandler implements ExpressHandler {
 
@@ -38,6 +40,12 @@ public class ExpressZhongtongHandler implements ExpressHandler {
 		this.zhongtongConfig = zhongtongConfig;
 	}
 	
+	/**
+     * 查询轨迹信息
+     * 
+     * @param expressParam	快递号、手机、快递公司编码
+     * @return 查询接口
+     */
     @Override
     public ExpressResult getExpressInfo(ExpressParam expressParam) {
         String requestUrl = "http://japi.zto.cn/traceInterfaceNewTraces";
@@ -49,14 +57,14 @@ public class ExpressZhongtongHandler implements ExpressHandler {
             secretKey = "kfpttestkey==";
 		}
         
-        HashMap<String, Object> paramMap = new HashMap<>();
+        HashMap<String, Object> paramMap = new HashMap<>(3);
 		String[] expressNo = {expressParam.getExpressNo()};
 		paramMap.put("company_id", companyId);
 		paramMap.put("msg_type", "NEW_TRACES");
 		paramMap.put("data", JSON.toJSONString(expressNo));
 		String beforeDigestStr = StringUtils.buildMapToStr(paramMap, "UTF-8")+secretKey;
-		String dataDigest = Base64.getEncoder().encodeToString(DigestUtils.Md5(beforeDigestStr));
-		Map<String,String> requestHeader = new HashMap<String,String>();
+		String dataDigest = Base64.getEncoder().encodeToString(DigestUtils.md5Digest(beforeDigestStr));
+		Map<String,String> requestHeader = new HashMap<String,String>(3);
 		requestHeader.put("x-companyid", companyId);
 		requestHeader.put("x-datadigest", dataDigest);
 		requestHeader.put("ContentType", "application/x-www-form-urlencoded; charset=utf-8");
@@ -115,12 +123,21 @@ public class ExpressZhongtongHandler implements ExpressHandler {
    		return expressResult;
    	}
    	
+   	/**
+     * 创建订单
+     * @param createOrderParam	下单参数，主要包含物品信息、收件人信息、寄件人信息等
+     * @return	快递单号等信息
+     */
    	@Override
-	public OrderResult createOrder() {
+	public OrderResult createOrder(CreateOrderParam createOrderParam) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
+   	/**
+     * 获取当前快递公司编码
+     * @return 快递公司编码
+     */
     @Override
     public String getExpressCompanyCode() {
         return ExpressCompanyCodeEnum.ZTO.getValue();

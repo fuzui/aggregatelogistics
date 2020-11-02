@@ -1,9 +1,10 @@
 package net.kdks.constant;
 
 /**
- * 中通路由操作
- * @author wangze
- * @date 2020-10-22 18:43:31
+ * 中通路由状态.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public interface ZhongtongScanType {
 	/**

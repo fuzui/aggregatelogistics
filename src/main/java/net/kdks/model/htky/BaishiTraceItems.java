@@ -1,15 +1,15 @@
 package net.kdks.model.htky;
 
 import net.kdks.constant.BaishiScanType;
-import net.kdks.constant.ShunfengOpCode;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.ExpressData;
 import net.kdks.utils.DateUtils;
 
 /**
- * 流转信息项
- * @author wangze
- * @date 2020-10-10 19:08:36
+ * 路由信息.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public class BaishiTraceItems extends ExpressData {
 	

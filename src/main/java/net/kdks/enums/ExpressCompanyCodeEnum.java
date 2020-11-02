@@ -1,9 +1,10 @@
 package net.kdks.enums;
 
 /**
- * 快递公司编码
- * @author wangze
- * @date 2020-09-25 12:10:50
+ * 快递公司编码.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
  */
 public enum ExpressCompanyCodeEnum implements ValueEnum<String> {
 

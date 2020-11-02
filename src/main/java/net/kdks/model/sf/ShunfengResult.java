@@ -2,6 +2,12 @@ package net.kdks.model.sf;
 
 import com.alibaba.fastjson.JSON;
 
+/**
+ * 顺丰轨迹查询请求结果.
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
+ */
 public class ShunfengResult {
 	private String apiErrorMsg;
 	
