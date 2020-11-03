@@ -12,12 +12,12 @@ import com.alibaba.fastjson.JSONException;
 import cn.hutool.http.HttpUtil;
 import net.kdks.config.ShentongConfig;
 import net.kdks.constant.CommonConstant;
-import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 import net.kdks.model.sto.ShentongResult;
@@ -45,7 +45,7 @@ public class ExpressShentongHandler implements ExpressHandler {
      * @return 查询接口
      */
 	@Override
-	public ExpressResult getExpressInfo(ExpressParam expressParam) {
+	public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam) {
 		String requestUrl = "https://cloudinter-linkgatewayonline.sto.cn/gateway/link.do";
 		if(shentongConfig.getIsProduct() == 0) {
 			requestUrl = "http://cloudinter-linkgatewaytest.sto.cn/gateway/link.do";
@@ -81,7 +81,7 @@ public class ExpressShentongHandler implements ExpressHandler {
 	 * @param responseData
 	 * @return
 	 */
-	private ExpressResult disposeResult(String responseData, String expressNo) {
+	private ExpressResponse<ExpressResult> disposeResult(String responseData, String expressNo) {
 		ShentongResult result = new ShentongResult();
 		ExpressResult expressResult = new ExpressResult();
 		expressResult.setOriginalResult(responseData);
@@ -95,13 +95,10 @@ public class ExpressShentongHandler implements ExpressHandler {
 			int strStartIndex = responseData.indexOf(messageStart);
 	        int strEndIndex = responseData.indexOf(messageEnd);
 	        String errorResult = responseData.substring(strStartIndex, strEndIndex).substring(messageStart.length());
-	        expressResult.setStatus(HttpStatusCode.EXCEPTION);
-			expressResult.setMessage(errorResult);
-			return expressResult;
+			return ExpressResponse.failed(errorResult);
 		}
 		
 		if (result.getSuccess()) {
-			expressResult.setStatus(HttpStatusCode.SUCCESS);
 			List<ShentongRoute> routes = result.getData().get(expressNo);
 			if(routes != null && routes.size() != 0) {
 				List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
@@ -113,16 +110,13 @@ public class ExpressShentongHandler implements ExpressHandler {
 					expressResult.setIscheck(CommonConstant.YES);
 				}
 				expressResult.setData(data);
+				return ExpressResponse.ok(expressResult);
 			}else {
-				expressResult.setStatus(HttpStatusCode.EXCEPTION);
-				expressResult.setMessage(CommonConstant.NO_INFO);
+				return ExpressResponse.failed(CommonConstant.NO_INFO);
 			}
 			
-		} else {
-			expressResult.setStatus(HttpStatusCode.EXCEPTION);
-			expressResult.setMessage(result.getErrorMsg());
-		}
-		return expressResult;
+		} 
+		return ExpressResponse.failed(result.getErrorMsg());
 	}
 	
 	/**
@@ -131,9 +125,8 @@ public class ExpressShentongHandler implements ExpressHandler {
      * @return	快递单号等信息
      */
 	@Override
-	public OrderResult createOrder(CreateOrderParam createOrderParam) {
-		// TODO Auto-generated method stub
-		return null;
+	public ExpressResponse<OrderResult> createOrder(CreateOrderParam createOrderParam) {
+		return ExpressResponse.failed(CommonConstant.NO_SOPPORT);
 	}
 
 	/**

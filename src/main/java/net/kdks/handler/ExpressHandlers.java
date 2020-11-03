@@ -7,6 +7,7 @@ import net.kdks.config.ExpressConfig;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 
@@ -39,7 +40,7 @@ public class ExpressHandlers {
      * @param expressCompanyCode	快递公司编码
      * @return 查询接口
      */
-    public ExpressResult getExpressInfo(ExpressParam expressParam, String expressCompanyCode) {
+    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam, String expressCompanyCode) {
         return getSupportedCode(expressCompanyCode).getExpressInfo(expressParam);
     }
     /**
@@ -48,7 +49,7 @@ public class ExpressHandlers {
      * @param expressCompanyCode	快递公司编码
      * @return	快递单号等信息
      */
-    public OrderResult createOrder(CreateOrderParam createOrderParam, String expressCompanyCode) {
+    public ExpressResponse<OrderResult> createOrder(CreateOrderParam createOrderParam, String expressCompanyCode) {
     	return getSupportedCode(expressCompanyCode).createOrder(createOrderParam);
     }
 
@@ -78,9 +79,6 @@ public class ExpressHandlers {
      */
     private ExpressHandler getSupportedCode(String code)  {
     	ExpressHandler handler = expressHandlers.getOrDefault(code, expressHandlers.get(ExpressCompanyCodeEnum.STO.getValue()));
-    	if(handler == null) {
-        	
-        }
         return handler;
     }
 }

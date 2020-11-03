@@ -11,12 +11,12 @@ import com.alibaba.fastjson.JSON;
 import cn.hutool.http.HttpRequest;
 import net.kdks.config.BaishiConfig;
 import net.kdks.constant.CommonConstant;
-import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 import net.kdks.model.htky.BaishiResult;
@@ -45,7 +45,7 @@ public class ExpressBaishiHandler implements ExpressHandler {
      * @return 查询接口
      */
     @Override
-    public ExpressResult getExpressInfo(ExpressParam expressParam) {
+    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam) {
         String requestUrl = "http://edi-q9.ns.800best.com/kd/api/process";
         if(baishiConfig.getIsProduct() == 0) {
 			requestUrl = "http://kdtest.800best.com/kd/api/process";
@@ -87,17 +87,19 @@ public class ExpressBaishiHandler implements ExpressHandler {
 	 * 结果处理
 	 * 
 	 * @param responseData
-	 * @return
+	 * @return 查询结果
 	 */
-	private ExpressResult disposeResult(String responseData, String expressNo) {
+	private ExpressResponse<ExpressResult> disposeResult(String responseData, String expressNo) {
 		BaishiResult result = JSON.parseObject(responseData, BaishiResult.class);
 		ExpressResult expressResult = new ExpressResult();
 		expressResult.setOriginalResult(responseData);
 		expressResult.setCom(ExpressCompanyCodeEnum.HTKY.getValue());
 		expressResult.setNu(expressNo);
 		if (result.getResult()) {
-			
-			expressResult.setStatus(HttpStatusCode.SUCCESS);
+			//此结果必然存在不会出现空指针，无需判断
+			if(result.getTraceLogs() == null || result.getTraceLogs().size() == 0) {
+				return ExpressResponse.failed(CommonConstant.NO_INFO);
+			}
 			List<BaishiTraceItems> routes = result.getTraceLogs().get(0).getTraces().getTrace();
 			if(routes != null) {
 				//官方默认正序，改为倒序
@@ -111,12 +113,14 @@ public class ExpressBaishiHandler implements ExpressHandler {
 					expressResult.setIscheck(CommonConstant.YES);
 				}
 				expressResult.setData(data);
+				return ExpressResponse.ok(expressResult);
+			}else {
+				return ExpressResponse.failed(CommonConstant.NO_INFO);
 			}
-		} else {
-			expressResult.setStatus(HttpStatusCode.EXCEPTION);
-			expressResult.setMessage(result.getErrorDescription());
-		}
-		return expressResult;
+			
+		} 
+		return ExpressResponse.failed(result.getErrorDescription());
+		
 	}
 
 	/**
@@ -125,9 +129,9 @@ public class ExpressBaishiHandler implements ExpressHandler {
      * @return	快递单号等信息
      */
 	@Override
-	public OrderResult createOrder(CreateOrderParam createOrderParam) {
+	public ExpressResponse<OrderResult> createOrder(CreateOrderParam createOrderParam) {
 		// TODO Auto-generated method stub
-		return null;
+		return ExpressResponse.failed(CommonConstant.NO_SOPPORT);
 	}
 	
 	/**

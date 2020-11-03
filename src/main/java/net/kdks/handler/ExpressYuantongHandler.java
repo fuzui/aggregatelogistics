@@ -16,12 +16,12 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import net.kdks.config.YuantongConfig;
 import net.kdks.constant.CommonConstant;
-import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 import net.kdks.model.yto.YuanTongErrorResult;
@@ -51,7 +51,7 @@ public class ExpressYuantongHandler implements ExpressHandler {
      * @return 查询接口
      */
     @Override
-    public ExpressResult getExpressInfo(ExpressParam expressParam) {
+    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam) {
     	
     	String secretKey = yuantongConfig.getSecretKey();
         String appKey = yuantongConfig.getAppkey();
@@ -112,7 +112,7 @@ public class ExpressYuantongHandler implements ExpressHandler {
 	 * @param responseData
 	 * @return
 	 */
-	private ExpressResult disposeResult(String responseData, String expressNo) {
+	private ExpressResponse<ExpressResult> disposeResult(String responseData, String expressNo) {
 		
 		ExpressResult expressResult = new ExpressResult();
 		expressResult.setOriginalResult(responseData);
@@ -121,7 +121,6 @@ public class ExpressYuantongHandler implements ExpressHandler {
 		List<YuanTongResult> routes = new ArrayList<YuanTongResult>();
 		try {
 			routes = JSON.parseObject(responseData, new TypeReference<ArrayList<YuanTongResult>>(){});
-			expressResult.setStatus(HttpStatusCode.SUCCESS);
 			List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
 			//官方默认正序，改为倒序
 			Collections.reverse(routes);
@@ -133,6 +132,7 @@ public class ExpressYuantongHandler implements ExpressHandler {
 				expressResult.setIscheck(CommonConstant.YES);
 			}
 			expressResult.setData(data);
+			return ExpressResponse.ok(expressResult);
 		} catch (JSONException e) {
 			YuanTongErrorResult errorResult = new YuanTongErrorResult();
 			try {
@@ -146,13 +146,8 @@ public class ExpressYuantongHandler implements ExpressHandler {
 				errorResult.setMessage(result);
 				
 			}
-			
-			expressResult.setStatus(HttpStatusCode.EXCEPTION);
-			expressResult.setMessage(errorResult.getMessage());
-			
+			return ExpressResponse.failed(errorResult.getMessage());
 		}
-		
-		return expressResult;
 	}
 	
 	/**
@@ -161,9 +156,8 @@ public class ExpressYuantongHandler implements ExpressHandler {
      * @return	快递单号等信息
      */
 	@Override
-	public OrderResult createOrder(CreateOrderParam createOrderParam) {
-		// TODO Auto-generated method stub
-		return null;
+	public ExpressResponse<OrderResult> createOrder(CreateOrderParam createOrderParam) {
+		return ExpressResponse.failed(CommonConstant.NO_SOPPORT);
 	}
 
 	/**

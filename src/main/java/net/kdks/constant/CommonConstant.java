@@ -16,6 +16,8 @@ public interface CommonConstant {
 	 */
 	Integer NO = 0;
 	
-	String NO_INFO = "暂无物流信息";
+	String NO_INFO = "单号不存在";
+	
+	String NO_SOPPORT = "暂不支持";
 	
 }

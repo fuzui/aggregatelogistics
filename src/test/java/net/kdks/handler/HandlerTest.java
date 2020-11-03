@@ -10,6 +10,7 @@ import net.kdks.model.CargoDetail;
 import net.kdks.model.ContactInfo;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 
@@ -45,7 +46,7 @@ public class HandlerTest {
 	public void queryShentong() {
 		ExpressParam param = new ExpressParam();
 		param.setExpressNo("773044983842140");
-		ExpressResult expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.STO.getValue());
+		ExpressResponse<ExpressResult> expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.STO.getValue());
 		System.out.println(expressResult.toString());
 	}
 	
@@ -59,7 +60,7 @@ public class HandlerTest {
 	public void queryYuantong() {
 		ExpressParam param = new ExpressParam();
 		param.setExpressNo("YT4784621755802");
-		ExpressResult expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.YTO.getValue());
+		ExpressResponse<ExpressResult> expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.YTO.getValue());
 		System.out.println(expressResult.toString());
 	}
 	
@@ -73,7 +74,7 @@ public class HandlerTest {
 	public void queryBaishi() {
 		ExpressParam param = new ExpressParam();
 		param.setExpressNo("550005705674324");
-		ExpressResult expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.HTKY.getValue());
+		ExpressResponse<ExpressResult> expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.HTKY.getValue());
 		System.out.println(expressResult.toString());
 	}
 	/**
@@ -85,9 +86,9 @@ public class HandlerTest {
 	@Test
 	public void queryShunfeng() {
 		ExpressParam param = new ExpressParam();
-		param.setMobile("2203");
-		param.setExpressNo("SF7444419349734");
-		ExpressResult expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.SF.getValue());
+		param.setMobile("0728");
+		param.setExpressNo("SF1028995968316");
+		ExpressResponse<ExpressResult> expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.SF.getValue());
 		System.out.println(expressResult.toString());
 	}
 	
@@ -123,7 +124,7 @@ public class HandlerTest {
 		createOrderParam.setCargoDetail(cargoDetail);
 		createOrderParam.setSendContactInfo(sendContactInfo);
 		createOrderParam.setReceiptContactInfo(receiptContactInfo);
-		OrderResult orderResult = expressHandlers.createOrder(createOrderParam,ExpressCompanyCodeEnum.SF.getValue());
+		ExpressResponse<OrderResult> orderResult = expressHandlers.createOrder(createOrderParam,ExpressCompanyCodeEnum.SF.getValue());
 		System.out.println(orderResult);
 	}
 	/**
@@ -135,8 +136,8 @@ public class HandlerTest {
 	@Test
 	public void queryZhongtong() {
 		ExpressParam param = new ExpressParam();
-		param.setExpressNo("75401533589487");
-		ExpressResult expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.ZTO.getValue());
+		param.setExpressNo("75378742756756");
+		ExpressResponse<ExpressResult> expressResult = expressHandlers.getExpressInfo(param, ExpressCompanyCodeEnum.YD.getValue());
 		System.out.println(expressResult.toString());
 	}
 }

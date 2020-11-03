@@ -15,17 +15,9 @@ public class ExpressResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	/**
-	 * 消息体
-	 */
-	private String message;
-	/**
 	 * 0在途，1揽收，2疑难，3签收，4退回，5派件，6转投，7转投
 	 */
 	private Integer state;
-	/**
-	 * 通讯状态
-	 */
-	private Integer status;
 	
 	/**
 	 * 	是否签收标记
@@ -51,13 +43,6 @@ public class ExpressResult implements Serializable {
 		return apiResult;
 	}
 
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 	public Integer getState() {
 		return state;
@@ -65,14 +50,6 @@ public class ExpressResult implements Serializable {
 
 	public void setState(Integer state) {
 		this.state = state;
-	}
-
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
 	}
 
 	public Integer getIscheck() {
@@ -123,7 +100,7 @@ public class ExpressResult implements Serializable {
 
 	@Override
 	public String toString() {
-		return "ExpressResult [message=" + message + ", state=" + state + ", status=" + status + ", ischeck=" + ischeck
+		return "ExpressResult [state=" + state + ", ischeck=" + ischeck
 				+ ", com=" + com + ", nu=" + nu + ", data=" + data + ", originalResult=" + originalResult + "]";
 	}
 

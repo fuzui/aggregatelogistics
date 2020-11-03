@@ -15,15 +15,16 @@ import cn.hutool.http.Header;
 import cn.hutool.http.HttpRequest;
 import net.kdks.config.ShunfengConfig;
 import net.kdks.constant.CommonConstant;
-import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 import net.kdks.model.sf.Route;
+import net.kdks.model.sf.RouteResps;
 import net.kdks.model.sf.ShunfengResult;
 import net.kdks.model.sf.WaybillNoInfo;
 import net.kdks.utils.DateUtils;
@@ -50,7 +51,7 @@ public class ExpressShunfengHandler implements ExpressHandler {
      * @return 查询接口
      */
     @Override
-    public ExpressResult getExpressInfo(ExpressParam expressParam) {
+    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam) {
     	String requestUrl = getRequestUrl();
         String serviceCode = "EXP_RECE_SEARCH_ROUTES";
         Map<String, Object> paramItemsMap = new HashMap<>(5);
@@ -74,7 +75,7 @@ public class ExpressShunfengHandler implements ExpressHandler {
      * @param responseData
      * @return
      */
-    private ExpressResult disposeResult(String responseData, String expressNo) {
+    private ExpressResponse<ExpressResult> disposeResult(String responseData, String expressNo) {
     	ShunfengResult result = JSON.parseObject(responseData, ShunfengResult.class);
 		ExpressResult expressResult = new ExpressResult();
 		expressResult.setOriginalResult(responseData);
@@ -83,9 +84,14 @@ public class ExpressShunfengHandler implements ExpressHandler {
 		String successFlag = "A1000";
 		if(successFlag.equals(result.getApiResultCode())) {
 			if(result.getApiResultData().getSuccess()) {
-				
-				expressResult.setStatus(HttpStatusCode.SUCCESS);
-				List<Route> routes = result.getApiResultData().getMsgData().getRouteResps().get(0).getRoutes();
+				List<RouteResps> routeResps = result.getApiResultData().getMsgData().getRouteResps();
+				if(routeResps == null || routeResps.size() == 0) {
+					return ExpressResponse.failed(CommonConstant.NO_INFO);
+				}
+				List<Route> routes = routeResps.get(0).getRoutes();
+				if(routes == null || routes.size() == 0) {
+					return ExpressResponse.failed(CommonConstant.NO_INFO);
+				}
 				List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
 				//默认正序，改为倒序
 				Collections.reverse(routes);
@@ -97,15 +103,12 @@ public class ExpressShunfengHandler implements ExpressHandler {
 					expressResult.setIscheck(CommonConstant.YES);
 				}
 				expressResult.setData(data);
+				return ExpressResponse.ok(expressResult);
 			}else {
-				expressResult.setStatus(HttpStatusCode.EXCEPTION);
-				expressResult.setMessage(result.getApiResultData().getErrorMsg());
+				return ExpressResponse.failed(result.getApiResultData().getErrorMsg());
 			}
-		}else {
-			expressResult.setStatus(HttpStatusCode.EXCEPTION);
-			expressResult.setMessage(result.getApiErrorMsg());
 		}
-        return expressResult;
+        return ExpressResponse.failed(result.getApiErrorMsg());
     }
 
     /**
@@ -114,7 +117,7 @@ public class ExpressShunfengHandler implements ExpressHandler {
      * @return	快递单号等信息
      */
     @Override
-	public OrderResult createOrder(CreateOrderParam createOrderParam) {
+	public ExpressResponse<OrderResult> createOrder(CreateOrderParam createOrderParam) {
     	String requestUrl = getRequestUrl();
     	
         String serviceCode = "EXP_RECE_CREATE_ORDER";
@@ -155,27 +158,23 @@ public class ExpressShunfengHandler implements ExpressHandler {
      * @param responseData
      * @return
      */
-    private OrderResult disposeCreateOrderResult(String responseData, String orderId) {
+    private ExpressResponse<OrderResult> disposeCreateOrderResult(String responseData, String orderId) {
     	OrderResult orderResult = new OrderResult();
     	orderResult.setOrderId(orderId);
     	ShunfengResult result = JSON.parseObject(responseData, ShunfengResult.class);
 		String successFlag = "A1000";
 		if(successFlag.equals(result.getApiResultCode())) {
 			if(result.getApiResultData().getSuccess()) {
-				orderResult.setStatus(HttpStatusCode.SUCCESS);
 				List<WaybillNoInfo> waybillNoInfoList = result.getApiResultData().getMsgData().getWaybillNoInfoList();
 				if(waybillNoInfoList != null && waybillNoInfoList.size() != 0) {
 					orderResult.setExpressNo(waybillNoInfoList.get(0).getWaybillNo());
+					return ExpressResponse.ok(orderResult);
 				}
 			}else {
-				orderResult.setStatus(HttpStatusCode.EXCEPTION);
-				orderResult.setMessage(result.getApiResultData().getErrorMsg());
+				return ExpressResponse.failed(result.getApiResultData().getErrorMsg());
 			}
-		}else {
-			orderResult.setStatus(HttpStatusCode.EXCEPTION);
-			orderResult.setMessage(result.getApiErrorMsg());
 		}
-        return orderResult;
+        return ExpressResponse.failed(result.getApiErrorMsg());
     }
     
     private String getRequestUrl() {

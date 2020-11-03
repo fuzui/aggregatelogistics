@@ -12,12 +12,12 @@ import com.alibaba.fastjson.JSON;
 import cn.hutool.http.HttpRequest;
 import net.kdks.config.ZhongtongConfig;
 import net.kdks.constant.CommonConstant;
-import net.kdks.constant.HttpStatusCode;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 import net.kdks.model.zto.ZhongtongData;
@@ -47,7 +47,7 @@ public class ExpressZhongtongHandler implements ExpressHandler {
      * @return 查询接口
      */
     @Override
-    public ExpressResult getExpressInfo(ExpressParam expressParam) {
+    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam) {
         String requestUrl = "http://japi.zto.cn/traceInterfaceNewTraces";
         String companyId = zhongtongConfig.getCompanyId();
         String secretKey = zhongtongConfig.getSecretKey();
@@ -72,7 +72,6 @@ public class ExpressZhongtongHandler implements ExpressHandler {
 			    .addHeaders(requestHeader)
 			    .body(StringUtils.buildMapToStrUrl(paramMap, "UTF-8"))
 			    .execute().body();
-		System.out.println(responseData);
         return disposeResult(responseData, expressNo[0]);
         
     }
@@ -83,7 +82,7 @@ public class ExpressZhongtongHandler implements ExpressHandler {
    	 * @param responseData
    	 * @return
    	 */
-   	private ExpressResult disposeResult(String responseData, String expressNo) {
+   	private ExpressResponse<ExpressResult> disposeResult(String responseData, String expressNo) {
    		ZhongtongResult result = JSON.parseObject(responseData, ZhongtongResult.class);
    		ExpressResult expressResult = new ExpressResult();
    		expressResult.setOriginalResult(responseData);
@@ -91,12 +90,9 @@ public class ExpressZhongtongHandler implements ExpressHandler {
    		expressResult.setNu(expressNo);
    		if (result.getStatus()) {
    			
-   			expressResult.setStatus(HttpStatusCode.SUCCESS);
    			List<ZhongtongData> zhongtongData = result.getData();
    			if(zhongtongData == null || zhongtongData.size() == 0) {
-   				expressResult.setStatus(HttpStatusCode.EXCEPTION);
-   	   			expressResult.setMessage(CommonConstant.NO_INFO);
-   	   			return expressResult;
+   	   			return ExpressResponse.failed(CommonConstant.NO_INFO);
    			}
    			List<ZhongtongTrace> routes = zhongtongData.get(0).getTraces();
    			if(routes != null && routes.size() != 0) {
@@ -111,16 +107,12 @@ public class ExpressZhongtongHandler implements ExpressHandler {
    					expressResult.setIscheck(CommonConstant.YES);
    				}
    				expressResult.setData(data);
+   				return ExpressResponse.ok(expressResult);
    			}else {
-   				expressResult.setStatus(HttpStatusCode.EXCEPTION);
-   	   			expressResult.setMessage(CommonConstant.NO_INFO);
-   	   			return expressResult;
+   	   			return ExpressResponse.failed(CommonConstant.NO_INFO);
    			}
-   		} else {
-   			expressResult.setStatus(HttpStatusCode.EXCEPTION);
-   			expressResult.setMessage(result.getMessage());
-   		}
-   		return expressResult;
+   		} 
+   		return ExpressResponse.failed(result.getMessage());
    	}
    	
    	/**
@@ -129,9 +121,8 @@ public class ExpressZhongtongHandler implements ExpressHandler {
      * @return	快递单号等信息
      */
    	@Override
-	public OrderResult createOrder(CreateOrderParam createOrderParam) {
-		// TODO Auto-generated method stub
-		return null;
+	public ExpressResponse<OrderResult> createOrder(CreateOrderParam createOrderParam) {
+   		return ExpressResponse.failed(CommonConstant.NO_SOPPORT);
 	}
 
    	/**

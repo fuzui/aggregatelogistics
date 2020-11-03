@@ -13,14 +13,6 @@ public class OrderResult implements Serializable {
 	private static final long serialVersionUID = 1L;
 	
 	/**
-	 * 通讯状态
-	 */
-	private Integer status;
-	/**
-	 * 提示信息
-	 */
-	private String message;
-	/**
 	 * 订单号
 	 */
 	private String orderId;
@@ -29,21 +21,6 @@ public class OrderResult implements Serializable {
 	 */
 	private String expressNo;
 
-	public Integer getStatus() {
-		return status;
-	}
-
-	public void setStatus(Integer status) {
-		this.status = status;
-	}
-
-	public String getMessage() {
-		return message;
-	}
-
-	public void setMessage(String message) {
-		this.message = message;
-	}
 
 	public String getOrderId() {
 		return orderId;
@@ -67,7 +44,7 @@ public class OrderResult implements Serializable {
 
 	@Override
 	public String toString() {
-		return "OrderResult [status=" + status + ", message=" + message + ", orderId=" + orderId + ", expressNo="
+		return "OrderResult [orderId=" + orderId + ", expressNo="
 				+ expressNo + "]";
 	}
 
