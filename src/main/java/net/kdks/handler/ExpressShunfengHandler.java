@@ -4,6 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Base64;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +87,8 @@ public class ExpressShunfengHandler implements ExpressHandler {
 				expressResult.setStatus(HttpStatusCode.SUCCESS);
 				List<Route> routes = result.getApiResultData().getMsgData().getRouteResps().get(0).getRoutes();
 				List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
+				//默认正序，改为倒序
+				Collections.reverse(routes);
 				for (Route route : routes) {
 					data.add(route);
 				}
