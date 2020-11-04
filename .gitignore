@@ -20,4 +20,5 @@ target/
 .settings/
 .project
 .classpath
+dump.rdb
 
