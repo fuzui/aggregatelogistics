@@ -46,6 +46,23 @@ public class ZhongtongConfig {
 	public void setIsProduct(int isProduct) {
 		this.isProduct = isProduct;
 	}
+	
+	public ZhongtongConfig() {
+		super();
+	}
+
+	public ZhongtongConfig(String companyId, String secretKey) {
+		super();
+		this.companyId = companyId;
+		this.secretKey = secretKey;
+	}
+
+	public ZhongtongConfig(String companyId, String secretKey, int isProduct) {
+		super();
+		this.companyId = companyId;
+		this.secretKey = secretKey;
+		this.isProduct = isProduct;
+	}
 
 	public static Builder builder() {
         return new Builder();

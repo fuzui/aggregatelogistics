@@ -187,13 +187,13 @@ public class ExpressShunfengHandler implements ExpressHandler {
     
     private Map<String, Object> getBaseParam(String serviceCode,Map<String, Object> paramItemsMap){
     	Map<String, Object> paramMap = new HashMap<>(6);
-    	String partnerID = shunfengConfig.getPartnerID();
-        String requestID = shunfengConfig.getRequestID();
+    	String partnerId = shunfengConfig.getPartnerId();
+        String requestId = shunfengConfig.getRequestId();
         Long timestamp = DateUtils.currentTimeMillis();
         String msgDigest = null;
         String checkWord = shunfengConfig.getCheckWord();
-        paramMap.put("partnerID", partnerID);
-		paramMap.put("requestID", requestID);
+        paramMap.put("partnerID", partnerId);
+		paramMap.put("requestID", requestId);
 		paramMap.put("serviceCode", serviceCode);
 		paramMap.put("timestamp", timestamp);
 		String param = JSON.toJSONString(paramItemsMap);

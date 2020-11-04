@@ -51,6 +51,23 @@ public class ShentongConfig {
         return new Builder();
     }
 	
+	public ShentongConfig() {
+		super();
+	}
+	
+	public ShentongConfig(String appkey, String secretKey) {
+		super();
+		this.appkey = appkey;
+		this.secretKey = secretKey;
+	}
+
+	public ShentongConfig(String appkey, String secretKey, int isProduct) {
+		super();
+		this.appkey = appkey;
+		this.secretKey = secretKey;
+		this.isProduct = isProduct;
+	}
+
 	public static class Builder {
 		private String appkey;
 		private String secretKey;

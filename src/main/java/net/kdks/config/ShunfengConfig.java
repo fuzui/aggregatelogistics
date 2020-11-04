@@ -3,7 +3,7 @@ package net.kdks.config;
 /**
  * 顺丰快递配置.
  * 
- * <p>API配置,包含[partnerID,requestID,checkWord],isProduct标识测试与生产环境<br>
+ * <p>API配置,包含[partnerId,requestId,checkWord],isProduct标识测试与生产环境<br>
  * 配置获取:<em><a href="http://qiao.sf-express.com/">顺丰开放平台</a></em>
  * 
  * @author Ze.Wang
@@ -12,29 +12,29 @@ package net.kdks.config;
 public class ShunfengConfig {
 	
 	private ShunfengConfig(Builder builder) {
-		partnerID = builder.partnerID;
-		requestID = builder.requestID;
+		partnerId = builder.partnerId;
+		requestId = builder.requestId;
 		checkWord = builder.checkWord;
 		isProduct = builder.isProduct;
     }
 	
-	private String partnerID;
-	private String requestID;
+	private String partnerId;
+	private String requestId;
 	private String checkWord;
 	
 	private int isProduct;
 	
-	public String getPartnerID() {
-		return partnerID;
+	public String getPartnerId() {
+		return partnerId;
 	}
-	public void setPartnerID(String partnerID) {
-		this.partnerID = partnerID;
+	public void setPartnerId(String partnerId) {
+		this.partnerId = partnerId;
 	}
-	public String getRequestID() {
-		return requestID;
+	public String getRequestId() {
+		return requestId;
 	}
-	public void setRequestID(String requestID) {
-		this.requestID = requestID;
+	public void setRequestId(String requestId) {
+		this.requestId = requestId;
 	}
 	public String getCheckWord() {
 		return checkWord;
@@ -54,33 +54,36 @@ public class ShunfengConfig {
         return new Builder();
     }
 	
-	public ShunfengConfig(String partnerID, String requestID, String checkWord) {
+	public ShunfengConfig() {
 		super();
-		this.partnerID = partnerID;
-		this.requestID = requestID;
+	}
+	public ShunfengConfig(String partnerId, String requestId, String checkWord) {
+		super();
+		this.partnerId = partnerId;
+		this.requestId = requestId;
 		this.checkWord = checkWord;
 	}
 	
-	public ShunfengConfig(String partnerID, String requestID, String checkWord, int isProduct) {
+	public ShunfengConfig(String partnerId, String requestId, String checkWord, int isProduct) {
 		super();
-		this.partnerID = partnerID;
-		this.requestID = requestID;
+		this.partnerId = partnerId;
+		this.requestId = requestId;
 		this.checkWord = checkWord;
 		this.isProduct = isProduct;
 	}
 	
 	public static class Builder {
-		private String partnerID;
-		private String requestID;
+		private String partnerId;
+		private String requestId;
 		private String checkWord;
 		private int isProduct = 1;
-        public Builder partnerID(String partnerID) {
-            this.partnerID = partnerID;
+        public Builder partnerId(String partnerId) {
+            this.partnerId = partnerId;
             return this;
         }
 
-        public Builder requestID(String requestID) {
-            this.requestID = requestID;
+        public Builder requestId(String requestId) {
+            this.requestId = requestId;
             return this;
         }
         
@@ -101,7 +104,7 @@ public class ShunfengConfig {
 	
 	@Override
 	public String toString() {
-		return "ShunfengConfig [partnerID=" + partnerID + ", requestID=" + requestID + ", checkWord=" + checkWord
+		return "ShunfengConfig [partnerId=" + partnerId + ", requestId=" + requestId + ", checkWord=" + checkWord
 				+ ", isProduct=" + isProduct + "]";
 	}
 	

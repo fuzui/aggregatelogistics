@@ -50,7 +50,7 @@ public class ExpressBaishiHandler implements ExpressHandler {
         if(baishiConfig.getIsProduct() == 0) {
 			requestUrl = "http://kdtest.800best.com/kd/api/process";
 		}
-        String partnerID = baishiConfig.getPartnerID();
+        String partnerId = baishiConfig.getPartnerId();
         String secretKey = baishiConfig.getSecretKey();
         
         String serviceType = "KD_TRACE_QUERY";
@@ -66,7 +66,7 @@ public class ExpressBaishiHandler implements ExpressHandler {
         String bizData = JSON.toJSONString(paramItemsMap);
 		paramMap.put("bizData", bizData);
 		paramMap.put("serviceType", serviceType);
-		paramMap.put("partnerID", partnerID);
+		paramMap.put("partnerID", partnerId);
 		paramMap.put("messageType", messageType);
 		
 		String beforeDigestStr = bizData+secretKey;

@@ -3,7 +3,7 @@ package net.kdks.config;
 /**
  * 百世快递配置.
  * 
- * <p>API配置,包含[partnerID,secretKey],isProduct标识测试与生成<br>
+ * <p>API配置,包含[partnerId,secretKey],isProduct标识测试与生成<br>
  * 配置获取:<em><a href="https://open.800best.com/">百世开放平台</a></em>
  * 
  * @author Ze.Wang
@@ -12,20 +12,20 @@ package net.kdks.config;
 public class BaishiConfig {
 	
 	private BaishiConfig(Builder builder) {
-		partnerID = builder.partnerID;
+		partnerId = builder.partnerId;
 		secretKey = builder.secretKey;
 		isProduct = builder.isProduct;
     }
 	
-	private String partnerID;
+	private String partnerId;
 	private String secretKey;
 	private int isProduct;
 	
-	public String getPartnerID() {
-		return partnerID;
+	public String getPartnerId() {
+		return partnerId;
 	}
-	public void setPartnerID(String partnerID) {
-		this.partnerID = partnerID;
+	public void setPartnerId(String partnerId) {
+		this.partnerId = partnerId;
 	}
 	public String getSecretKey() {
 		return secretKey;
@@ -45,25 +45,28 @@ public class BaishiConfig {
         return new Builder();
     }
 	
-	public BaishiConfig(String partnerID, String secretKey) {
+	public BaishiConfig() {
 		super();
-		this.partnerID = partnerID;
+	}
+	public BaishiConfig(String partnerId, String secretKey) {
+		super();
+		this.partnerId = partnerId;
 		this.secretKey = secretKey;
 	}
 	
-	public BaishiConfig(String partnerID, String secretKey, int isProduct) {
+	public BaishiConfig(String partnerId, String secretKey, int isProduct) {
 		super();
-		this.partnerID = partnerID;
+		this.partnerId = partnerId;
 		this.secretKey = secretKey;
 		this.isProduct = isProduct;
 	}
 	
 	public static class Builder {
-		private String partnerID;
+		private String partnerId;
 		private String secretKey;
 		private int isProduct = 1;
-        public Builder partnerID(String partnerID) {
-            this.partnerID = partnerID;
+        public Builder partnerId(String partnerId) {
+            this.partnerId = partnerId;
             return this;
         }
 
@@ -84,7 +87,7 @@ public class BaishiConfig {
 	
 	@Override
 	public String toString() {
-		return "ShunfengConfig [partnerID=" + partnerID + ", secretKey=" + secretKey + ", isProduct=" + isProduct + "]";
+		return "ShunfengConfig [partnerId=" + partnerId + ", secretKey=" + secretKey + ", isProduct=" + isProduct + "]";
 	}
 	
 	

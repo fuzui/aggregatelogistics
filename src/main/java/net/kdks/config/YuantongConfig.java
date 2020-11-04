@@ -3,7 +3,7 @@ package net.kdks.config;
 /**
  * 圆通快递配置.
  * 
- * <p>API配置,包含[partnerID,secretKey,userId],isProduct标识测试与生产环境<br>
+ * <p>API配置,包含[partnerId,secretKey,userId],isProduct标识测试与生产环境<br>
  * 配置获取:<em><a href="http://open.yto.net.cn/">圆通开放平台</a></em>
  * 
  * @author Ze.Wang
@@ -55,6 +55,27 @@ public class YuantongConfig {
 	}
 
 	public void setIsProduct(int isProduct) {
+		this.isProduct = isProduct;
+	}
+
+	
+	
+	public YuantongConfig() {
+		super();
+	}
+
+	public YuantongConfig(String appkey, String secretKey, String userId) {
+		super();
+		this.appkey = appkey;
+		this.secretKey = secretKey;
+		this.userId = userId;
+	}
+
+	public YuantongConfig(String appkey, String secretKey, String userId, int isProduct) {
+		super();
+		this.appkey = appkey;
+		this.secretKey = secretKey;
+		this.userId = userId;
 		this.isProduct = isProduct;
 	}
 

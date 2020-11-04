@@ -6,9 +6,9 @@ package net.kdks.config;
  * <p>包含顺丰、申通、百世、圆通、中通.
  * <pre>
  * 		ExpressConfig config = ExpressConfig.builder()
-				.shunfengConfig("partnerID","requestID","checkWord",1)
+				.shunfengConfig("partnerId","requestId","checkWord",1)
 				.shentongConfig("appkey", "secretKey", 1)
-				.baishiConfig("partnerID", "partnerID", 1)
+				.baishiConfig("partnerId", "secretKey", 1)
 				.yuantongConfig("appkey", "secretKey", "userId")
 				.zhongtongConfig("companyId", "secretKey", 0)
 				.build();
@@ -28,6 +28,10 @@ public class ExpressConfig {
 		zhongtongConfig = builder.zhongtongConfig;
     }
 	
+	public ExpressConfig() {
+		super();
+	}
+
 	private ShunfengConfig shunfengConfig;
 	
 	private ShentongConfig shentongConfig;
@@ -95,23 +99,23 @@ public class ExpressConfig {
 		
 		/**
 		 * 顺丰
-		 * @param partnerID
-		 * @param requestID
+		 * @param partnerId
+		 * @param requestId
 		 * @param checkWord
 		 * @return Builder
 		 */
-        public Builder shunfengConfig(String partnerID,String requestID,String checkWord) {
+        public Builder shunfengConfig(String partnerId,String requestId,String checkWord) {
             this.shunfengConfig = ShunfengConfig.builder()
-            		.partnerID(partnerID)
-            		.requestID(requestID)
+            		.partnerId(partnerId)
+            		.requestId(requestId)
             		.checkWord(checkWord)
             		.build();
             return this;
         }
-        public Builder shunfengConfig(String partnerID,String requestID,String checkWord,int isProduct) {
+        public Builder shunfengConfig(String partnerId,String requestId,String checkWord,int isProduct) {
             this.shunfengConfig = ShunfengConfig.builder()
-            		.partnerID(partnerID)
-            		.requestID(requestID)
+            		.partnerId(partnerId)
+            		.requestId(requestId)
             		.checkWord(checkWord)
             		.isProduct(isProduct)
             		.build();
@@ -142,20 +146,20 @@ public class ExpressConfig {
         
         /**
          * 百世
-         * @param partnerID
+         * @param partnerId
          * @param secretKey
          * @return Builder
          */
-        public Builder baishiConfig(String partnerID, String secretKey) {
+        public Builder baishiConfig(String partnerId, String secretKey) {
         	this.baishiConfig = BaishiConfig.builder()
-        			.partnerID(partnerID)
+        			.partnerId(partnerId)
         			.secretKey(secretKey)
         			.build();
         	return this;
         }
-        public Builder baishiConfig(String partnerID, String secretKey,int isProduct) {
+        public Builder baishiConfig(String partnerId, String secretKey,int isProduct) {
         	this.baishiConfig = BaishiConfig.builder()
-        			.partnerID(partnerID)
+        			.partnerId(partnerId)
         			.secretKey(secretKey)
         			.isProduct(isProduct)
         			.build();
