@@ -3,12 +3,15 @@ package net.kdks.model;
 import java.io.Serializable;
 import java.math.BigDecimal;
 
+import lombok.Data;
+
 /**
  * 物品信息.
  * 
  * @author Ze.Wang
  * @since 0.0.1
  */
+@Data
 public class CargoDetail implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -41,67 +44,5 @@ public class CargoDetail implements Serializable {
 	 * 名字
 	 */
 	private String name;
-
-	public BigDecimal getCount() {
-		return count;
-	}
-
-	public void setCount(BigDecimal count) {
-		this.count = count;
-	}
-
-	public String getUnit() {
-		return unit;
-	}
-
-	public void setUnit(String unit) {
-		this.unit = unit;
-	}
-
-	public BigDecimal getWeight() {
-		return weight;
-	}
-
-	public void setWeight(BigDecimal weight) {
-		this.weight = weight;
-	}
-
-	public BigDecimal getAmount() {
-		return amount;
-	}
-
-	public void setAmount(BigDecimal amount) {
-		this.amount = amount;
-	}
-
-	public String getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	@Override
-	public String toString() {
-		return "CargoDetail [count=" + count + ", unit=" + unit + ", weight=" + weight + ", amount=" + amount
-				+ ", currency=" + currency + ", name=" + name + "]";
-	}
-
-	
-	
-	
 
 }

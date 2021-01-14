@@ -1,11 +1,14 @@
 package net.kdks.model.htky;
 
+import lombok.Data;
+
 /**
  * 问题件子项.
  * 
  * @author Ze.Wang
  * @since 0.0.1
  */
+@Data
 public class BaishiProblemItems {
 	/**
 	 * 序列号
@@ -53,73 +56,5 @@ public class BaishiProblemItems {
 	 * 回复内容
 	 */
 	private String replyContent;
-	public Long getSeqNum() {
-		return seqNum;
-	}
-	public void setSeqNum(Long seqNum) {
-		this.seqNum = seqNum;
-	}
-	public String getProblemType() {
-		return problemType;
-	}
-	public void setProblemType(String problemType) {
-		this.problemType = problemType;
-	}
-	public String getRegisterMan() {
-		return registerMan;
-	}
-	public void setRegisterMan(String registerMan) {
-		this.registerMan = registerMan;
-	}
-	public String getRegisterDate() {
-		return registerDate;
-	}
-	public void setRegisterDate(String registerDate) {
-		this.registerDate = registerDate;
-	}
-	public String getRegisterSite() {
-		return registerSite;
-	}
-	public void setRegisterSite(String registerSite) {
-		this.registerSite = registerSite;
-	}
-	public String getProblemCause() {
-		return problemCause;
-	}
-	public void setProblemCause(String problemCause) {
-		this.problemCause = problemCause;
-	}
-	public String getNoticeSite() {
-		return noticeSite;
-	}
-	public void setNoticeSite(String noticeSite) {
-		this.noticeSite = noticeSite;
-	}
-	public String getReplyMan() {
-		return replyMan;
-	}
-	public void setReplyMan(String replyMan) {
-		this.replyMan = replyMan;
-	}
-	public String getReplyDate() {
-		return replyDate;
-	}
-	public void setReplyDate(String replyDate) {
-		this.replyDate = replyDate;
-	}
-	public String getReplyContent() {
-		return replyContent;
-	}
-	public void setReplyContent(String replyContent) {
-		this.replyContent = replyContent;
-	}
-	@Override
-	public String toString() {
-		return "BaishiProblemItems [seqNum=" + seqNum + ", problemType=" + problemType + ", registerMan=" + registerMan
-				+ ", registerDate=" + registerDate + ", registerSite=" + registerSite + ", problemCause=" + problemCause
-				+ ", noticeSite=" + noticeSite + ", replyMan=" + replyMan + ", replyDate=" + replyDate
-				+ ", replyContent=" + replyContent + "]";
-	}
-	
 	
 }

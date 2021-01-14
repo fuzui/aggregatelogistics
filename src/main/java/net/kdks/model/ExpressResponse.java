@@ -1,10 +1,17 @@
 package net.kdks.model;
 
-import java.io.Serializable;
-
+import lombok.Data;
 import net.kdks.constant.ExpressResponseStatus;
 
-public class ExpressResponse<T> implements Serializable {
+/**
+ * 响应结果
+ * 
+ * @author Ze.Wang
+ * @since 0.0.1
+ */
+@Data
+public class ExpressResponse<T> {
+
 	/**
      * 授权响应状态码
      */
@@ -20,31 +27,6 @@ public class ExpressResponse<T> implements Serializable {
      */
     private T data;
 
-	public int getCode() {
-		return code;
-	}
-
-	public void setCode(int code) {
-		this.code = code;
-	}
-
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-
-	public T getData() {
-		return data;
-	}
-
-	public void setData(T data) {
-		this.data = data;
-	}
-	
-	
 	public ExpressResponse() {
 		super();
 	}
@@ -90,11 +72,5 @@ public class ExpressResponse<T> implements Serializable {
 	public static <T> ExpressResponse<T> failed(T data, String msg) {
 		return restResult(data, ExpressResponseStatus.FAIL, msg);
 	}
-
-	@Override
-	public String toString() {
-		return "ExpressResponse [code=" + code + ", msg=" + msg + ", data=" + data + "]";
-	}
-    
     
 }

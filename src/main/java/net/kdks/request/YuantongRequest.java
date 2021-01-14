@@ -16,7 +16,7 @@ import net.kdks.utils.StringUtils;
  * <p>date: 2021-01-12 13:29:57</p>
  * 
  * @author Ze.Wang
- * @since 0.0.1
+ * @since 0.0.7
  */
 public class YuantongRequest {
 	

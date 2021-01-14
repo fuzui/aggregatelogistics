@@ -66,6 +66,7 @@
 		<junit.version>4.11</junit.version>
 		<fastjson.version>1.2.73</fastjson.version>
 		<hutool-http.version>5.4.3</hutool-http.version>
+		<lombok.version>1.18.12</lombok.version>
 		<nexus-staging-maven-plugin.version>1.6.7</nexus-staging-maven-plugin.version>
 	</properties>
 	<dependencies>
@@ -84,6 +85,12 @@
 			<groupId>cn.hutool</groupId>
 			<artifactId>hutool-http</artifactId>
 			<version>${hutool-http.version}</version>
+		</dependency>
+		<!--Lombok -->
+		<dependency>
+			<groupId>org.projectlombok</groupId>
+			<artifactId>lombok</artifactId>
+			<version>${lombok.version}</version>
 		</dependency>
 	</dependencies>
 	<build>

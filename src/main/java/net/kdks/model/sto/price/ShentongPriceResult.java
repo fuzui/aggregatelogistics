@@ -1,28 +1,19 @@
 package net.kdks.model.sto.price;
 
+import lombok.Data;
+import lombok.EqualsAndHashCode;
 import net.kdks.model.sto.ShentongBaseResult;
 
 /**
- * 申通轨迹查询结果.
+ * 申通运费预估结果.
  * 
  * @author Ze.Wang
- * @since 0.0.1
+ * @since 0.0.7
  */
+@Data
+@EqualsAndHashCode(callSuper = true)
 public class ShentongPriceResult extends ShentongBaseResult {
+	
 	private ShentongPriceData data;
 
-	public ShentongPriceData getData() {
-		return data;
-	}
-
-	public void setData(ShentongPriceData data) {
-		this.data = data;
-	}
-
-	@Override
-	public String toString() {
-		return "ShentongPriceResult [data=" + data + ", getSuccess()=" + getSuccess() + ", getErrorCode()="
-				+ getErrorCode() + ", getErrorMsg()=" + getErrorMsg() + ", toString()=" + super.toString()
-				+ ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + "]";
-	}
 }

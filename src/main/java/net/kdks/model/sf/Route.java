@@ -1,5 +1,6 @@
 package net.kdks.model.sf;
 
+import lombok.ToString;
 import net.kdks.constant.ShunfengOpCode;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.ExpressData;
@@ -11,6 +12,7 @@ import net.kdks.utils.DateUtils;
  * @author Ze.Wang
  * @since 0.0.1
  */
+@ToString
 public class Route extends ExpressData {
 	
 	private static final long serialVersionUID = 1L;
@@ -81,13 +83,4 @@ public class Route extends ExpressData {
 		super.setStatus(ExpressStateEnum.TRANSITING.getValue());
 		
 	}
-
-	@Override
-	public String toString() {
-		return "Route [getContext()=" + getContext() + ", getTime()=" + getTime() + ", getFtime()=" + getFtime()
-				+ ", getStatus()=" + getStatus() + ", getAreaCode()=" + getAreaCode() + ", getAreaName()="
-				+ getAreaName() + ", getClass()=" + getClass() + ", hashCode()=" + hashCode() + ", toString()="
-				+ super.toString() + "]";
-	}
-	
 }

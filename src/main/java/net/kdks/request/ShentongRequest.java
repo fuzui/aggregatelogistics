@@ -4,24 +4,17 @@ import java.util.Base64;
 import java.util.HashMap;
 import java.util.Map;
 
-import com.alibaba.fastjson.JSON;
-
-import cn.hutool.http.Header;
-import cn.hutool.http.HttpRequest;
 import cn.hutool.http.HttpUtil;
 import net.kdks.config.ShentongConfig;
 import net.kdks.constant.ShentongMethod;
-import net.kdks.constant.YuantongMethod;
-import net.kdks.utils.DateUtils;
 import net.kdks.utils.DigestUtils;
-import net.kdks.utils.StringUtils;
 
 /**
  * <p>申通请求封装</p>
  * <p>date: 2021-01-13 17:23:55</p>
  * 
  * @author Ze.Wang
- * @since 0.0.1
+ * @since 0.0.7
  */
 public class ShentongRequest {
 	

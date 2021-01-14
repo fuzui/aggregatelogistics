@@ -1,5 +1,6 @@
 package net.kdks.model.zto;
 
+import lombok.ToString;
 import net.kdks.constant.ZhongtongScanType;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.ExpressData;
@@ -11,6 +12,7 @@ import net.kdks.utils.DateUtils;
  * @author Ze.Wang
  * @since 0.0.1
  */
+@ToString
 public class ZhongtongTrace extends ExpressData {
 	private static final long serialVersionUID = 1L;
 
@@ -79,14 +81,4 @@ public class ZhongtongTrace extends ExpressData {
 		super.setStatus(ExpressStateEnum.TRANSITING.getValue());
 	}
 
-	@Override
-	public String toString() {
-		return "ZhongtongTrace [getContext()=" + getContext() + ", getTime()=" + getTime() + ", getFtime()="
-				+ getFtime() + ", getStatus()=" + getStatus() + ", getAreaCode()=" + getAreaCode() + ", getAreaName()="
-				+ getAreaName() + ", toString()=" + super.toString() + ", getClass()=" + getClass() + ", hashCode()="
-				+ hashCode() + "]";
-	}
-	
-	
-	
 }

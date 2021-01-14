@@ -4,38 +4,20 @@ import java.util.List;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import lombok.Data;
+
 /**
- * 申通运单数据.
+ * 申通运费预估数据.
  * 
  * @author Ze.Wang
  * @since 0.0.1
  */
+@Data
 public class ShentongPriceData {
 	@JSONField(name = "Ageing")
 	private String ageing;
 	
 	@JSONField(name = "AvailableServiceItemList")
 	private List<ShentongPriceDataItem> availableServiceItemList;
-
-	public String getAgeing() {
-		return ageing;
-	}
-
-	public void setAgeing(String ageing) {
-		this.ageing = ageing;
-	}
-
-	public List<ShentongPriceDataItem> getAvailableServiceItemList() {
-		return availableServiceItemList;
-	}
-
-	public void setAvailableServiceItemList(List<ShentongPriceDataItem> availableServiceItemList) {
-		this.availableServiceItemList = availableServiceItemList;
-	}
-
-	@Override
-	public String toString() {
-		return "ShentongPriceData [ageing=" + ageing + ", availableServiceItemList=" + availableServiceItemList + "]";
-	}
 
 }

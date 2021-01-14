@@ -1,25 +1,16 @@
 package net.kdks.model.sto.price;
 
+import lombok.Data;
+
 /**
- * 申通运单数据.
+ * 申通运费预估数据.
  * 
  * @author Ze.Wang
  * @since 0.0.1
  */
+@Data
 public class ShentongPriceDataItem {
 	
 	private ShentongFeeModel feeModel;
 
-	public ShentongFeeModel getFeeModel() {
-		return feeModel;
-	}
-
-	public void setFeeModel(ShentongFeeModel feeModel) {
-		this.feeModel = feeModel;
-	}
-
-	@Override
-	public String toString() {
-		return "ShentongPriceDataItem [feeModel=" + feeModel + "]";
-	}
 }

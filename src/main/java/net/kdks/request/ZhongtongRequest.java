@@ -15,14 +15,13 @@ import net.kdks.utils.StringUtils;
  * <p>date: 2021-01-12 13:29:57</p>
  * 
  * @author Ze.Wang
- * @since 0.0.1
+ * @since 0.0.7
  */
 public class ZhongtongRequest {
 	
 	private String companyId;
 	private String secretKey;
 	private String requestUrlPrefix;
-	private String v = "1";
 	public ZhongtongRequest(ZhongtongConfig zhongtongConfig) {
 		this.companyId = zhongtongConfig.getCompanyId();
 		this.secretKey = zhongtongConfig.getSecretKey();
@@ -52,25 +51,6 @@ public class ZhongtongRequest {
 	public String queryPriceRequest(String param,String format) {
 		String requestUrl = requestUrlPrefix+ZhongtongMethod.QUERY_PRICE_UR;
 		return request(ZhongtongMethod.QUERY_PRICE, requestUrl, param, format);
-//		param.put("companyCode", companyId);
-//		String requestUrl = requestUrlPrefix+ZhongtongMethod.QUERY_PRICE_URL;
-//		HashMap<String, Object> paramMap = new HashMap<>(1);
-//		paramMap.put("request", param);
-//		
-//		String beforeDigestStr = StringUtils.buildMapToStr(paramMap, "UTF-8")+secretKey;
-//		String dataDigest = Base64.getEncoder().encodeToString(DigestUtils.md5Digest(beforeDigestStr));
-//		System.out.println(dataDigest.toString());
-//		Map<String,String> requestHeader = new HashMap<String,String>(3);
-//		requestHeader.put("x-companyid", companyId);
-//		requestHeader.put("x-datadigest", dataDigest);
-//		requestHeader.put("ContentType", "application/x-www-form-urlencoded; charset=utf-8");
-//		String responseData = HttpRequest.post(requestUrl)
-//			    .addHeaders(requestHeader)
-//			    .body(StringUtils.buildMapToStrUrl(paramMap, "UTF-8"))
-//			    .execute().body();
-//		System.out.println(responseData);
-//		return null;
-//		return request(ZhongtongMethod.QUERY_PRICE, requestUrl, param, format);
 	}
 	
 	/**

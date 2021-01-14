@@ -2,13 +2,17 @@ package net.kdks.model.htky;
 
 import java.util.List;
 
+import lombok.Data;
+
 /**
  * 问题件.
  * 
  * @author Ze.Wang
  * @since 0.0.1
  */
+@Data
 public class BaishiProblem {
+	
 	/**
 	 * 问题信息
 	 */
@@ -17,22 +21,5 @@ public class BaishiProblem {
 	 * 运单号
 	 */
 	private String mailNo;
-	public List<BaishiProblemItems> getProblem() {
-		return problem;
-	}
-	public void setProblem(List<BaishiProblemItems> problem) {
-		this.problem = problem;
-	}
-	public String getMailNo() {
-		return mailNo;
-	}
-	public void setMailNo(String mailNo) {
-		this.mailNo = mailNo;
-	}
-	@Override
-	public String toString() {
-		return "BaishiProblem [problem=" + problem + ", mailNo=" + mailNo + "]";
-	}
-	
 	
 }

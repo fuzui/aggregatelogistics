@@ -1,5 +1,6 @@
 package net.kdks.model.htky;
 
+import lombok.ToString;
 import net.kdks.constant.BaishiScanType;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.ExpressData;
@@ -11,6 +12,7 @@ import net.kdks.utils.DateUtils;
  * @author Ze.Wang
  * @since 0.0.1
  */
+@ToString
 public class BaishiTraceItems extends ExpressData {
 	
 	private static final long serialVersionUID = 1L;

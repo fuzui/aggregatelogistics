@@ -2,12 +2,15 @@ package net.kdks.model;
 
 import java.io.Serializable;
 
+import lombok.Data;
+
 /**
  * 下单结果.
  * 
  * @author Ze.Wang
  * @since 0.0.1
  */
+@Data
 public class OrderResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -20,36 +23,5 @@ public class OrderResult implements Serializable {
 	 * 运单号
 	 */
 	private String expressNo;
-
-
-	public String getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public String getExpressNo() {
-		return expressNo;
-	}
-
-	public void setExpressNo(String expressNo) {
-		this.expressNo = expressNo;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-
-	@Override
-	public String toString() {
-		return "OrderResult [orderId=" + orderId + ", expressNo="
-				+ expressNo + "]";
-	}
-
-	
-	
-	
 	
 }

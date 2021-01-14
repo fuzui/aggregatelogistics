@@ -2,6 +2,7 @@ package net.kdks.model.yto;
 
 import com.alibaba.fastjson.annotation.JSONField;
 
+import lombok.ToString;
 import net.kdks.constant.YuantongScanType;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.ExpressData;
@@ -13,6 +14,7 @@ import net.kdks.utils.DateUtils;
  * @author Ze.Wang
  * @since 0.0.1
  */
+@ToString
 public class YuanTongResult extends ExpressData {
 	private static final long serialVersionUID = 1L;
 	@JSONField(name = "waybill_No")
@@ -52,14 +54,5 @@ public class YuanTongResult extends ExpressData {
 		super.setStatus(ExpressStateEnum.TRANSITING.getValue());
 		
 	}
-
-	@Override
-	public String toString() {
-		return "YuanTongResult [getContext()=" + getContext() + ", getTime()=" + getTime() + ", getFtime()="
-				+ getFtime() + ", getStatus()=" + getStatus() + ", getAreaCode()=" + getAreaCode() + ", getAreaName()="
-				+ getAreaName() + ", toString()=" + super.toString() + ", getClass()=" + getClass() + ", hashCode()="
-				+ hashCode() + "]";
-	}
-	
 	
 }

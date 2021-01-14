@@ -5,12 +5,15 @@ import java.util.List;
 
 import com.alibaba.fastjson.JSONObject;
 
+import lombok.Data;
+
 /**
  * 物流查询结果.
  * 
  * @author Ze.Wang
  * @since 0.0.1
  */
+@Data
 public class ExpressResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
@@ -45,76 +48,4 @@ public class ExpressResult implements Serializable {
 		apiResult = JSONObject.parseObject(msg, ExpressResult.class);
 		return apiResult;
 	}
-
-
-	public Integer getState() {
-		return state;
-	}
-
-	public void setState(Integer state) {
-		this.state = state;
-	}
-	
-	public String getMsg() {
-		return msg;
-	}
-
-	public void setMsg(String msg) {
-		this.msg = msg;
-	}
-
-	public Integer getIscheck() {
-		return ischeck;
-	}
-
-	public void setIscheck(Integer ischeck) {
-		this.ischeck = ischeck;
-	}
-
-	public String getCom() {
-		return com;
-	}
-
-	public void setCom(String com) {
-		this.com = com;
-	}
-
-	public String getNu() {
-		return nu;
-	}
-
-	public void setNu(String nu) {
-		this.nu = nu;
-	}
-
-	public List<ExpressData> getData() {
-		return data;
-	}
-
-	public void setData(List<ExpressData> data) {
-		this.data = data;
-	}
-
-	public static long getSerialversionuid() {
-		return serialVersionUID;
-	}
-	
-	
-
-	public String getOriginalResult() {
-		return originalResult;
-	}
-
-	public void setOriginalResult(String originalResult) {
-		this.originalResult = originalResult;
-	}
-
-	@Override
-	public String toString() {
-		return "ExpressResult [state=" + state + ", ischeck=" + ischeck
-				+ ", com=" + com + ", nu=" + nu + ", data=" + data + ", originalResult=" + originalResult + "]";
-	}
-
-	
-	
 }
