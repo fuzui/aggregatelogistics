@@ -1,12 +1,15 @@
 package net.kdks.handler;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.kdks.config.ExpressConfig;
 import net.kdks.enums.ExpressCompanyCodeEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressPriceParam;
+import net.kdks.model.ExpressPriceResult;
 import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
@@ -40,9 +43,20 @@ public class ExpressHandlers {
      * @param expressCompanyCode	快递公司编码
      * @return 查询接口
      */
-    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam, String expressCompanyCode) {
+    public ExpressResponse<List<ExpressResult>> getExpressInfo(ExpressParam expressParam, String expressCompanyCode) {
         return getSupportedCode(expressCompanyCode).getExpressInfo(expressParam);
     }
+    
+    /**
+	 * 运费预估
+	 * 
+	 * @param expressPriceParam 起始省份、起始城市、目的身份、目的城市、重量、长、宽、高
+	 * @return 运费
+	 */
+    public ExpressResponse<ExpressPriceResult> getExpressPrice(ExpressPriceParam expressPriceParam, String expressCompanyCode) {
+    	return getSupportedCode(expressCompanyCode).getExpressPrice(expressPriceParam);
+    }
+    
     /**
      * 创建订单
      * @param createOrderParam	下单参数，主要包含物品信息、收件人信息、寄件人信息等

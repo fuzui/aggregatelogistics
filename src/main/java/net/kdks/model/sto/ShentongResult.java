@@ -9,19 +9,7 @@ import java.util.Map;
  * @author Ze.Wang
  * @since 0.0.1
  */
-public class ShentongResult {
-	/**
-	 * 是否成功
-	 */
-	private Boolean success;
-	/**
-	 * 错误编码
-	 */
-	private String errorCode;
-	/**
-	 * 错误信息
-	 */
-	private String errorMsg;
+public class ShentongResult extends ShentongBaseResult {
 	/**
 	 * 是否重试
 	 */
@@ -38,24 +26,6 @@ public class ShentongResult {
 	 * 查询结果Map,key是查询的单号，value是对应的轨迹集合
 	 */
 	private Map<String,List<ShentongRoute>> data;
-	public Boolean getSuccess() {
-		return success;
-	}
-	public void setSuccess(Boolean success) {
-		this.success = success;
-	}
-	public String getErrorCode() {
-		return errorCode;
-	}
-	public void setErrorCode(String errorCode) {
-		this.errorCode = errorCode;
-	}
-	public String getErrorMsg() {
-		return errorMsg;
-	}
-	public void setErrorMsg(String errorMsg) {
-		this.errorMsg = errorMsg;
-	}
 	public Boolean getNeedRetry() {
 		return needRetry;
 	}
@@ -82,10 +52,10 @@ public class ShentongResult {
 	}
 	@Override
 	public String toString() {
-		return "ShentongResult [success=" + success + ", errorCode=" + errorCode + ", errorMsg=" + errorMsg
-				+ ", needRetry=" + needRetry + ", requestId=" + requestId + ", expInfo=" + expInfo + ", data=" + data
-				+ "]";
+		return "ShentongResult [needRetry=" + needRetry + ", requestId=" + requestId + ", expInfo=" + expInfo
+				+ ", data=" + data + ", getSuccess()=" + getSuccess() + ", getErrorCode()=" + getErrorCode()
+				+ ", getErrorMsg()=" + getErrorMsg() + ", toString()=" + super.toString() + ", getClass()=" + getClass()
+				+ ", hashCode()=" + hashCode() + "]";
 	}
-	
 	
 }

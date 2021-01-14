@@ -7,6 +7,11 @@ package net.kdks.enums;
  * @since 0.0.1
  */
 public enum ExpressStateEnum implements ValueEnum<Integer> {
+	
+	/**
+     * 暂无物流信息
+     */
+    NO_INFO(-1),
 
     /**
      * 在途

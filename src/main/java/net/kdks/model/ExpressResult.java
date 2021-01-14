@@ -15,10 +15,13 @@ public class ExpressResult implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 	/**
-	 * 0在途，1揽收，2疑难，3签收，4退回，5派件，6转投，7转投
+	 * -1 暂无物流信息 0在途，1揽收，2疑难，3签收，4退回，5派件，6转投，7转投
 	 */
 	private Integer state;
-	
+	/**
+	 * 信息
+	 */
+	private String msg;
 	/**
 	 * 	是否签收标记
 	 */
@@ -50,6 +53,14 @@ public class ExpressResult implements Serializable {
 
 	public void setState(Integer state) {
 		this.state = state;
+	}
+	
+	public String getMsg() {
+		return msg;
+	}
+
+	public void setMsg(String msg) {
+		this.msg = msg;
 	}
 
 	public Integer getIscheck() {

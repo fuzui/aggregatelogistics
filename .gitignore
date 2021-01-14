@@ -21,4 +21,5 @@ target/
 .project
 .classpath
 dump.rdb
+**/HandlerTest.java
 

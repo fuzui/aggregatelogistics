@@ -20,6 +20,8 @@ import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressPriceParam;
+import net.kdks.model.ExpressPriceResult;
 import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
@@ -39,6 +41,7 @@ import net.kdks.utils.DigestUtils;
 public class ExpressShunfengHandler implements ExpressHandler {
 
 	private ShunfengConfig shunfengConfig;
+	private final static String SUCCESS_FLAG = "A1000";
 	
 	public ExpressShunfengHandler(ShunfengConfig shunfengConfig) {
 		this.shunfengConfig = shunfengConfig;
@@ -51,23 +54,23 @@ public class ExpressShunfengHandler implements ExpressHandler {
      * @return 查询接口
      */
     @Override
-    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam) {
+    public ExpressResponse<List<ExpressResult>> getExpressInfo(ExpressParam expressParam) {
     	String requestUrl = getRequestUrl();
         String serviceCode = "EXP_RECE_SEARCH_ROUTES";
         Map<String, Object> paramItemsMap = new HashMap<>(5);
-		String[] expressNo = {expressParam.getExpressNo()};
+		List<String> expressNos = expressParam.getExpressNos();
 		paramItemsMap.put("checkPhoneNo", expressParam.getMobile());
 		paramItemsMap.put("methodType", "1");
 		paramItemsMap.put("trackingType", "1");
 		paramItemsMap.put("language", "0");
-		paramItemsMap.put("trackingNumber", expressNo);
+		paramItemsMap.put("trackingNumber", expressNos);
 		Map<String, Object> paramMap = getBaseParam(serviceCode, paramItemsMap);
 		
 		String responseData = HttpRequest.post(requestUrl)
 			    .header(Header.CONTENT_TYPE, "application/x-www-form-urlencoded")
 			    .form(paramMap)
 			    .execute().body();
-		return disposeResult(responseData,expressNo[0]);
+		return disposeResult(responseData,expressParam);
         
     }
     /**
@@ -75,41 +78,80 @@ public class ExpressShunfengHandler implements ExpressHandler {
      * @param responseData
      * @return
      */
-    private ExpressResponse<ExpressResult> disposeResult(String responseData, String expressNo) {
+    private ExpressResponse<List<ExpressResult>> disposeResult(String responseData, ExpressParam expressParam) {
+    	List<String> expressNos = expressParam.getExpressNos();
     	ShunfengResult result = JSON.parseObject(responseData, ShunfengResult.class);
-		ExpressResult expressResult = new ExpressResult();
-		expressResult.setOriginalResult(responseData);
-		expressResult.setCom(ExpressCompanyCodeEnum.SF.getValue());
-		expressResult.setNu(expressNo);
-		String successFlag = "A1000";
-		if(successFlag.equals(result.getApiResultCode())) {
+    	List<ExpressResult> expressResults = new ArrayList<ExpressResult>();
+    	
+		if(SUCCESS_FLAG.equals(result.getApiResultCode())) {
 			if(result.getApiResultData().getSuccess()) {
 				List<RouteResps> routeResps = result.getApiResultData().getMsgData().getRouteResps();
 				if(routeResps == null || routeResps.size() == 0) {
 					return ExpressResponse.failed(CommonConstant.NO_INFO);
 				}
-				List<Route> routes = routeResps.get(0).getRoutes();
-				if(routes == null || routes.size() == 0) {
-					return ExpressResponse.failed(CommonConstant.NO_INFO);
+				Map<String,RouteResps> routeRespsMap = new HashMap<String, RouteResps>();
+				for(RouteResps resps: routeResps) {
+					routeRespsMap.put(resps.getMailNo(), resps);
 				}
-				List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
-				//默认正序，改为倒序
-				Collections.reverse(routes);
-				for (Route route : routes) {
-					data.add(route);
+				for(String expressNo: expressNos) {
+					ExpressResult expressResult = disposeRoute(routeRespsMap.get(expressNo), expressParam, responseData);
+					expressResults.add(expressResult);
 				}
-				expressResult.setState(data.get(0).getStatus());
-				if(expressResult.getState() == ExpressStateEnum.SIGNED.getValue()) {
-					expressResult.setIscheck(CommonConstant.YES);
-				}
-				expressResult.setData(data);
-				return ExpressResponse.ok(expressResult);
+				return ExpressResponse.ok(expressResults);
 			}else {
 				return ExpressResponse.failed(result.getApiResultData().getErrorMsg());
 			}
 		}
         return ExpressResponse.failed(result.getApiErrorMsg());
     }
+    
+    /**
+     * 路由处理
+     * @param routeResps
+     * @param isOriginal
+     * @param responseData
+     * @return 
+     */
+    private ExpressResult disposeRoute(RouteResps routeResps,ExpressParam expressParam,String responseData) {
+    	ExpressResult expressResult = new ExpressResult();
+    	if(expressParam.isViewOriginal()) {
+    		expressResult.setOriginalResult(responseData);
+    	}
+		expressResult.setCom(ExpressCompanyCodeEnum.SF.getValue());
+		expressResult.setNu(routeResps.getMailNo());
+		List<Route> routes = routeResps.getRoutes();
+		if(routes == null || routes.size() == 0) {
+			expressResult.setState(ExpressStateEnum.NO_INFO.getValue());
+			expressResult.setMsg(CommonConstant.NO_INFO);
+			return expressResult;
+		}
+		//默认正序，改为倒序
+		Collections.reverse(routes);
+		ExpressData latestData = routes.get(0);
+		if(expressParam.isViewRoute()) {
+			List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
+			for (Route route : routes) {
+				data.add(route);
+			}
+			expressResult.setData(data);
+		}
+		expressResult.setState(latestData.getStatus());
+		if(expressResult.getState() == ExpressStateEnum.SIGNED.getValue()) {
+			expressResult.setIscheck(CommonConstant.YES);
+		}
+    	return expressResult;
+    }
+    
+    /**
+	 * 运费预估
+	 * 
+	 * @param expressPriceParam 起始省份、起始城市、目的身份、目的城市、重量、长、宽、高
+	 * @return 运费
+	 */
+    @Override
+	public ExpressResponse<ExpressPriceResult> getExpressPrice(ExpressPriceParam expressPriceParam) {
+		return ExpressResponse.failed(CommonConstant.NO_SOPPORT);
+	}
 
     /**
      * 创建订单

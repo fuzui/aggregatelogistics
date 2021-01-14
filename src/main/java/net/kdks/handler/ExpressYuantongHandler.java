@@ -1,6 +1,7 @@
 package net.kdks.handler;
 
 import java.io.UnsupportedEncodingException;
+import java.math.BigDecimal;
 import java.net.URLEncoder;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -12,8 +13,6 @@ import com.alibaba.fastjson.JSON;
 import com.alibaba.fastjson.JSONException;
 import com.alibaba.fastjson.TypeReference;
 
-import cn.hutool.http.Header;
-import cn.hutool.http.HttpRequest;
 import net.kdks.config.YuantongConfig;
 import net.kdks.constant.CommonConstant;
 import net.kdks.enums.ExpressCompanyCodeEnum;
@@ -21,14 +20,14 @@ import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressPriceParam;
+import net.kdks.model.ExpressPriceResult;
 import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 import net.kdks.model.yto.YuanTongErrorResult;
 import net.kdks.model.yto.YuanTongResult;
-import net.kdks.utils.DateUtils;
-import net.kdks.utils.DigestUtils;
-import net.kdks.utils.StringUtils;
+import net.kdks.request.YuantongRequest;
 
 /**
  * 圆通.
@@ -38,10 +37,10 @@ import net.kdks.utils.StringUtils;
  */
 public class ExpressYuantongHandler implements ExpressHandler {
 
-	private YuantongConfig yuantongConfig;
+	private YuantongRequest yuantongRequest;
 	
 	public ExpressYuantongHandler(YuantongConfig yuantongConfig) {
-		this.yuantongConfig = yuantongConfig;
+		this.yuantongRequest = new YuantongRequest(yuantongConfig);
 	}
 	
 	/**
@@ -51,60 +50,26 @@ public class ExpressYuantongHandler implements ExpressHandler {
      * @return 查询接口
      */
     @Override
-    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam) {
+    public ExpressResponse<List<ExpressResult>> getExpressInfo(ExpressParam expressParam) {
     	
-    	String secretKey = yuantongConfig.getSecretKey();
-        String appKey = yuantongConfig.getAppkey();
-        String userId = yuantongConfig.getUserId();
-    	
-    	String requestUrl = "http://openapi.yto.net.cn/service/waybill_query/v1/"+userId;
-    	if(yuantongConfig.getIsProduct() == 0) {
-			requestUrl = "http://opentestapi.yto.net.cn/service/waybill_query/v1/"+userId;
+		List<ExpressResult> expressResults = new ArrayList<ExpressResult>();
+		for(String expressNo: expressParam.getExpressNos()) {
+			Map<String, Object>[] paramItemsMap = new Map[1];
+	        paramItemsMap[0] = new HashMap<>(1);
+			paramItemsMap[0].put("Number", expressNo);
+			String param = null;
+			try {
+				System.out.println(JSON.toJSONString(paramItemsMap));
+				param = URLEncoder.encode(JSON.toJSONString(paramItemsMap), "UTF-8");
+			} catch (UnsupportedEncodingException e) {
+				e.printStackTrace();
+			}
+			String responseData = yuantongRequest.queryRouteRequest(param, expressParam.getFormat());
+			System.out.println(responseData);
+			ExpressResult expressResult = disposeResult(responseData, expressNo, expressParam);
+			expressResults.add(expressResult);
 		}
-        
-        String format = "JSON";
-        String method = "yto.Marketing.WaybillTrace";
-        String v = "1";
-        String timestamp = DateUtils.currentTimeStr();
-        
-        Map<String, Object> paramMap = new HashMap<>(8);
-        Map<String, Object>[] paramItemsMap = new Map[1];
-        paramItemsMap[0] = new HashMap<>(1);
-		String expressNo = expressParam.getExpressNo();
-		paramItemsMap[0].put("Number", expressNo);
-		String param = null;
-		try {
-			param = URLEncoder.encode(JSON.toJSONString(paramItemsMap), "UTF-8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		
-		paramMap.put("app_key", appKey);
-		paramMap.put("format", format);
-		paramMap.put("method", method);
-		paramMap.put("timestamp", timestamp);
-		paramMap.put("user_id", userId);
-		paramMap.put("v", v);
-		paramMap.put("param", param);
-		
-		StringBuilder beforeDigestStr = new StringBuilder(secretKey);
-		beforeDigestStr.append("app_key").append(appKey)
-			.append("format").append(format)
-			.append("method").append(method)
-			.append("timestamp").append(timestamp)
-			.append("user_id").append(userId)
-			.append("v").append(v);
-		
-		String dataDigest = StringUtils.strTo16(DigestUtils.md5Digest(beforeDigestStr.toString()));
-		paramMap.put("sign", dataDigest.toUpperCase());
-		
-		String responseData = HttpRequest.post(requestUrl)
-			    .header(Header.CONTENT_TYPE, "application/x-www-form-urlencoded")
-			    .body(StringUtils.buildMapToStr(paramMap,"UTF-8"))
-			    .execute().body();
-		
-        return disposeResult(responseData, expressNo);
-        
+        return ExpressResponse.ok(expressResults);
     }
     /**
 	 * 结果处理
@@ -112,29 +77,44 @@ public class ExpressYuantongHandler implements ExpressHandler {
 	 * @param responseData
 	 * @return
 	 */
-	private ExpressResponse<ExpressResult> disposeResult(String responseData, String expressNo) {
+	private ExpressResult disposeResult(String responseData, String expressNo, ExpressParam expressParam) {
+		List<ExpressResult> expressResults = new ArrayList<ExpressResult>();
 		
 		ExpressResult expressResult = new ExpressResult();
-		expressResult.setOriginalResult(responseData);
+		if(expressParam.isViewOriginal()) {
+			expressResult.setOriginalResult(responseData);
+		}
 		expressResult.setCom(ExpressCompanyCodeEnum.YTO.getValue());
 		expressResult.setNu(expressNo);
-		List<YuanTongResult> routes = new ArrayList<YuanTongResult>();
+		
 		try {
+			List<YuanTongResult> routes = new ArrayList<YuanTongResult>();
 			routes = JSON.parseObject(responseData, new TypeReference<ArrayList<YuanTongResult>>(){});
-			List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
+			if(routes == null || routes.size() == 0) {
+				expressResult.setState(ExpressStateEnum.NO_INFO.getValue());
+				expressResult.setMsg(CommonConstant.NO_INFO);
+				return expressResult;
+			}
 			//官方默认正序，改为倒序
 			Collections.reverse(routes);
-			for (YuanTongResult route : routes) {
-				data.add(route);
+			ExpressData latestData = routes.get(0);
+			if(expressParam.isViewRoute()) {
+				List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
+				for (YuanTongResult route : routes) {
+					data.add(route);
+				}
+				expressResult.setData(data);
 			}
-			expressResult.setState(data.get(data.size() - 1).getStatus());
+			
+			expressResult.setState(latestData.getStatus());
 			if (expressResult.getState() == ExpressStateEnum.SIGNED.getValue()) {
 				expressResult.setIscheck(CommonConstant.YES);
 			}
-			expressResult.setData(data);
-			return ExpressResponse.ok(expressResult);
+			expressResults.add(expressResult);
+			return expressResult;
 		} catch (JSONException e) {
 			YuanTongErrorResult errorResult = new YuanTongErrorResult();
+			expressResult.setState(ExpressStateEnum.NO_INFO.getValue());
 			try {
 				errorResult = JSON.parseObject(responseData, YuanTongErrorResult.class);
 			} catch (JSONException e2) {
@@ -144,9 +124,52 @@ public class ExpressYuantongHandler implements ExpressHandler {
 		        int strEndIndex = responseData.indexOf(messageEnd);
 		        String result = responseData.substring(strStartIndex, strEndIndex).substring(messageStart.length());
 				errorResult.setMessage(result);
-				
 			}
-			return ExpressResponse.failed(errorResult.getMessage());
+			expressResult.setMsg(errorResult.getMessage());
+			return expressResult;
+		}
+	}
+	
+	/**
+	 * 运费预估
+	 * 
+	 * @param expressPriceParam 起始省份、起始城市、目的身份、目的城市、重量、长、宽、高
+	 * @return 运费
+	 */
+	@Override
+	public ExpressResponse<ExpressPriceResult> getExpressPrice(ExpressPriceParam expressPriceParam) {
+		Map<String, Object>[] paramItemsMap = new Map[1];
+        paramItemsMap[0] = new HashMap<>(1);
+		paramItemsMap[0].put("StartProvince", expressPriceParam.getStartProvince());
+		paramItemsMap[0].put("StartCity", expressPriceParam.getStartCity());
+		paramItemsMap[0].put("EndProvince", expressPriceParam.getEndProvince());
+		paramItemsMap[0].put("EndCity", expressPriceParam.getEndCity());
+		paramItemsMap[0].put("GoodsWeight", expressPriceParam.getWeight());
+		paramItemsMap[0].put("GoodsLength", expressPriceParam.getLength());
+		paramItemsMap[0].put("GoodsWidth", expressPriceParam.getWidth());
+		paramItemsMap[0].put("GoodsHeight", expressPriceParam.getHeight());
+		String param = null;
+		try {
+			System.out.println(JSON.toJSONString(paramItemsMap));
+			param = URLEncoder.encode(JSON.toJSONString(paramItemsMap), "UTF-8");
+		} catch (UnsupportedEncodingException e) {
+			e.printStackTrace();
+		}
+		System.out.println(param.toString());
+		String responseData = yuantongRequest.queryPriceRequest(param, expressPriceParam.getFormat());
+		System.out.println(responseData);
+		try {
+			BigDecimal price = new BigDecimal(responseData).setScale(2);
+			ExpressPriceResult expressPriceResult = new ExpressPriceResult();
+			expressPriceResult.setPrice(price);
+			return ExpressResponse.ok(expressPriceResult);
+		} catch (NumberFormatException e) {
+			String messageStart = "<reason>";
+			String messageEnd = "</reason>";
+			int strStartIndex = responseData.indexOf(messageStart);
+	        int strEndIndex = responseData.indexOf(messageEnd);
+	        String result = responseData.substring(strStartIndex, strEndIndex).substring(messageStart.length());
+	        return ExpressResponse.failed(result);
 		}
 	}
 	

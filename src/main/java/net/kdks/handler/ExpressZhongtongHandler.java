@@ -1,7 +1,8 @@
 package net.kdks.handler;
 
+import java.math.BigDecimal;
+import java.math.RoundingMode;
 import java.util.ArrayList;
-import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +10,6 @@ import java.util.Map;
 
 import com.alibaba.fastjson.JSON;
 
-import cn.hutool.http.HttpRequest;
 import net.kdks.config.ZhongtongConfig;
 import net.kdks.constant.CommonConstant;
 import net.kdks.enums.ExpressCompanyCodeEnum;
@@ -17,14 +17,16 @@ import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.CreateOrderParam;
 import net.kdks.model.ExpressData;
 import net.kdks.model.ExpressParam;
+import net.kdks.model.ExpressPriceParam;
+import net.kdks.model.ExpressPriceResult;
 import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
 import net.kdks.model.zto.ZhongtongData;
 import net.kdks.model.zto.ZhongtongResult;
 import net.kdks.model.zto.ZhongtongTrace;
-import net.kdks.utils.DigestUtils;
-import net.kdks.utils.StringUtils;
+import net.kdks.model.zto.price.ZhongtongPriceResult;
+import net.kdks.request.ZhongtongRequest;
 
 /**
  * 中通.
@@ -34,10 +36,10 @@ import net.kdks.utils.StringUtils;
  */
 public class ExpressZhongtongHandler implements ExpressHandler {
 
-	private ZhongtongConfig zhongtongConfig;
+	private ZhongtongRequest zhongtongRequest;
 	
 	public ExpressZhongtongHandler(ZhongtongConfig zhongtongConfig) {
-		this.zhongtongConfig = zhongtongConfig;
+		this.zhongtongRequest = new ZhongtongRequest(zhongtongConfig);
 	}
 	
 	/**
@@ -47,33 +49,11 @@ public class ExpressZhongtongHandler implements ExpressHandler {
      * @return 查询接口
      */
     @Override
-    public ExpressResponse<ExpressResult> getExpressInfo(ExpressParam expressParam) {
-        String requestUrl = "http://japi.zto.cn/traceInterfaceNewTraces";
-        String companyId = zhongtongConfig.getCompanyId();
-        String secretKey = zhongtongConfig.getSecretKey();
-        if(zhongtongConfig.getIsProduct() == 0) {
-        	requestUrl = "https://japi-test.zto.com/traceInterfaceNewTraces";
-            companyId = "kfpttestCode";
-            secretKey = "kfpttestkey==";
-		}
-        
-        HashMap<String, Object> paramMap = new HashMap<>(3);
-		String[] expressNo = {expressParam.getExpressNo()};
-		paramMap.put("company_id", companyId);
-		paramMap.put("msg_type", "NEW_TRACES");
-		paramMap.put("data", JSON.toJSONString(expressNo));
-		String beforeDigestStr = StringUtils.buildMapToStr(paramMap, "UTF-8")+secretKey;
-		String dataDigest = Base64.getEncoder().encodeToString(DigestUtils.md5Digest(beforeDigestStr));
-		Map<String,String> requestHeader = new HashMap<String,String>(3);
-		requestHeader.put("x-companyid", companyId);
-		requestHeader.put("x-datadigest", dataDigest);
-		requestHeader.put("ContentType", "application/x-www-form-urlencoded; charset=utf-8");
-		String responseData = HttpRequest.post(requestUrl)
-			    .addHeaders(requestHeader)
-			    .body(StringUtils.buildMapToStrUrl(paramMap, "UTF-8"))
-			    .execute().body();
-        return disposeResult(responseData, expressNo[0]);
-        
+    public ExpressResponse<List<ExpressResult>> getExpressInfo(ExpressParam expressParam) {
+		List<String> expressNos = expressParam.getExpressNos();
+		String param = JSON.toJSONString(expressNos);
+		String responseData = zhongtongRequest.queryRouteRequest(param, expressParam.getFormat());;
+        return disposeResult(responseData, expressParam);
     }
     
     /**
@@ -82,38 +62,87 @@ public class ExpressZhongtongHandler implements ExpressHandler {
    	 * @param responseData
    	 * @return
    	 */
-   	private ExpressResponse<ExpressResult> disposeResult(String responseData, String expressNo) {
+   	private ExpressResponse<List<ExpressResult>> disposeResult(String responseData, ExpressParam expressParam) {
+   		List<String> expressNos = expressParam.getExpressNos();
    		ZhongtongResult result = JSON.parseObject(responseData, ZhongtongResult.class);
-   		ExpressResult expressResult = new ExpressResult();
-   		expressResult.setOriginalResult(responseData);
-   		expressResult.setCom(ExpressCompanyCodeEnum.ZTO.getValue());
-   		expressResult.setNu(expressNo);
+   		List<ExpressResult> expressResults = new ArrayList<ExpressResult>();
    		if (result.getStatus()) {
-   			
-   			List<ZhongtongData> zhongtongData = result.getData();
-   			if(zhongtongData == null || zhongtongData.size() == 0) {
+   			List<ZhongtongData> zhongtongDatas = result.getData();
+   			if(zhongtongDatas == null || zhongtongDatas.size() == 0) {
    	   			return ExpressResponse.failed(CommonConstant.NO_INFO);
    			}
-   			List<ZhongtongTrace> routes = zhongtongData.get(0).getTraces();
-   			if(routes != null && routes.size() != 0) {
-   				//官方默认正序，改为倒序
-   				Collections.reverse(routes);
-   				List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
-   				for (ZhongtongTrace route : routes) {
-   					data.add(route);
+   			Map<String,ZhongtongData> zhongtongDataMap = new HashMap<String, ZhongtongData>();
+   			for(ZhongtongData zhongtongData: zhongtongDatas) {
+   				zhongtongDataMap.put(zhongtongData.getBillCode(), zhongtongData);
+   			}
+   			for(String expressNo: expressNos) {
+   				ExpressResult expressResult = new ExpressResult();
+   				if(expressParam.isViewOriginal()) {
+   					expressResult.setOriginalResult(responseData);
    				}
-   				expressResult.setState(data.get(0).getStatus());
+   		   		expressResult.setCom(ExpressCompanyCodeEnum.ZTO.getValue());
+   		   		expressResult.setNu(expressNo);
+   		   		List<ZhongtongTrace> routes = zhongtongDataMap.get(expressNo).getTraces();
+	   		   	if(routes == null || routes.size() == 0) {
+		   		   	expressResult.setState(ExpressStateEnum.NO_INFO.getValue());
+					expressResult.setMsg(CommonConstant.NO_INFO);
+	   		   		expressResults.add(expressResult);
+	   		   		continue;
+	   			}
+	   		   	//官方默认正序，改为倒序
+   				Collections.reverse(routes);
+   				ExpressData latestData = routes.get(0);
+   				if(expressParam.isViewRoute()) {
+   					List<ExpressData> data = new ArrayList<ExpressData>(routes.size());
+   	   				for (ZhongtongTrace route : routes) {
+   	   					data.add(route);
+   	   				}
+   	   				expressResult.setData(data);
+   				}
+   				expressResult.setState(latestData.getStatus());
    				if (expressResult.getState() == ExpressStateEnum.SIGNED.getValue()) {
    					expressResult.setIscheck(CommonConstant.YES);
    				}
-   				expressResult.setData(data);
-   				return ExpressResponse.ok(expressResult);
-   			}else {
-   	   			return ExpressResponse.failed(CommonConstant.NO_INFO);
+   				expressResults.add(expressResult);
    			}
+   			return ExpressResponse.ok(expressResults);
    		} 
    		return ExpressResponse.failed(result.getMessage());
    	}
+   	
+   	/**
+	 * 运费预估
+	 * 
+	 * @param expressPriceParam 起始省份、起始城市、目的身份、目的城市、重量、长、宽、高
+	 * @return 运费
+	 */
+   	@Override
+	public ExpressResponse<ExpressPriceResult> getExpressPrice(ExpressPriceParam expressPriceParam) {
+   		Map<String,Object> param = new HashMap<String, Object>();
+   		BigDecimal weight = expressPriceParam.getWeight();
+   		param.put("sendProv", expressPriceParam.getStartProvince());
+   		param.put("sendCity", expressPriceParam.getStartProvince());
+   		param.put("dispProv", expressPriceParam.getEndProvince());
+   		param.put("dispCity", expressPriceParam.getEndProvince());
+   		String responseData = zhongtongRequest.queryPriceRequest(JSON.toJSONString(param), expressPriceParam.getFormat());
+		System.out.println(responseData);
+		ZhongtongPriceResult zhongtongPriceResult = JSON.parseObject(responseData, ZhongtongPriceResult.class);
+		if(!zhongtongPriceResult.getStatus()) {
+			return ExpressResponse.failed(zhongtongPriceResult.getMsg());
+		}
+		ExpressPriceResult expressPriceResult = new ExpressPriceResult();
+		BigDecimal addMoney = new BigDecimal(zhongtongPriceResult.getData().getAddMoney()).setScale(2);
+		BigDecimal firstMoney = new BigDecimal(zhongtongPriceResult.getData().getFirstMoney()).setScale(2);
+		BigDecimal standardWeight = new BigDecimal("1.00");
+		BigDecimal price = firstMoney;
+		if(weight.compareTo(standardWeight) == 1) {
+			price = price.add(weight.subtract(standardWeight).divide(standardWeight,0,RoundingMode.CEILING).multiply(addMoney).setScale(2));
+		}
+		expressPriceResult.setPrice(price);
+		System.out.println(price);
+		expressPriceResult.setTime(new BigDecimal(zhongtongPriceResult.getData().getHour()).setScale(2));
+   		return ExpressResponse.ok(expressPriceResult);
+	}
    	
    	/**
      * 创建订单

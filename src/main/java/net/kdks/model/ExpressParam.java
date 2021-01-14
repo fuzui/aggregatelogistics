@@ -1,6 +1,7 @@
 package net.kdks.model;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 物流查询入参.
@@ -8,39 +9,36 @@ import java.io.Serializable;
  * @author Ze.Wang
  * @since 0.0.1
  */
-public class ExpressParam implements Serializable {
+public class ExpressParam extends BaseParam implements Serializable {
 
 	private static final long serialVersionUID = 1L;
 
 	/**
-	 * 快递公司官方简称
-	 */
-	private String expressCompanyNo;
-	
-	/**
 	 * 	快递号
 	 */
-	private String expressNo;
+	private List<String> expressNos;
 
 	/**
 	 * 手机号
 	 */
 	private String mobile;
+	
+	/**
+	 * 是否展示路由
+	 */
+	private boolean isViewRoute = true;
+	
+	/**
+	 * 是否展示原生信息
+	 */
+	private boolean isViewOriginal = false;
 
-	public String getExpressCompanyNo() {
-		return expressCompanyNo;
+	public List<String> getExpressNos() {
+		return expressNos;
 	}
 
-	public void setExpressCompanyNo(String expressCompanyNo) {
-		this.expressCompanyNo = expressCompanyNo;
-	}
-
-	public String getExpressNo() {
-		return expressNo;
-	}
-
-	public void setExpressNo(String expressNo) {
-		this.expressNo = expressNo;
+	public void setExpressNos(List<String> expressNos) {
+		this.expressNos = expressNos;
 	}
 
 	public String getMobile() {
@@ -50,11 +48,24 @@ public class ExpressParam implements Serializable {
 	public void setMobile(String mobile) {
 		this.mobile = mobile;
 	}
+	
+	public boolean isViewRoute() {
+		return isViewRoute;
+	}
+
+	public void setViewRoute(boolean isViewRoute) {
+		this.isViewRoute = isViewRoute;
+	}
+
+	public boolean isViewOriginal() {
+		return isViewOriginal;
+	}
+
+	public void setViewOriginal(boolean isViewOriginal) {
+		this.isViewOriginal = isViewOriginal;
+	}
 
 	public static long getSerialversionuid() {
 		return serialVersionUID;
 	}
-	
-	
-
 }

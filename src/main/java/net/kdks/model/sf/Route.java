@@ -29,7 +29,6 @@ public class Route extends ExpressData {
 	}
 	
 	public void setOpCode(String opCode) {
-		
 		/**
 		 * 顺丰已收件
 		 */
@@ -47,7 +46,7 @@ public class Route extends ExpressData {
 		/**
 		 * 已签收,感谢使用顺丰,期待再次为您服务
 		 */
-		if(opCode.equals(ShunfengOpCode.SIGNED)) {
+		if(opCode.equals(ShunfengOpCode.SIGNED) || opCode.equals(ShunfengOpCode.VIEW)) {
 			super.setStatus(ExpressStateEnum.SIGNED.getValue());
 			return;
 		}

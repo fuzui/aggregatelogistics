@@ -6,7 +6,7 @@ package net.kdks.constant;
  * @author Ze.Wang
  * @since 0.0.1
  */
-public interface ShengtongScanType {
+public interface ShentongScanType {
 	/**
 	 * 装袋
 	 */

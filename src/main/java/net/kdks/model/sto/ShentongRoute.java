@@ -1,6 +1,6 @@
 package net.kdks.model.sto;
 
-import net.kdks.constant.ShengtongScanType;
+import net.kdks.constant.ShentongScanType;
 import net.kdks.enums.ExpressStateEnum;
 import net.kdks.model.ExpressData;
 import net.kdks.utils.DateUtils;
@@ -31,28 +31,28 @@ public class ShentongRoute extends ExpressData {
 		/**
 		 * 收件
 		 */
-		if(scanType.equals(ShengtongScanType.COLLECTED)) {
+		if(scanType.equals(ShentongScanType.COLLECTED)) {
 			super.setStatus(ExpressStateEnum.COLLECTED.getValue());
 			return;
 		}
 		/**
 		 * 已签收
 		 */
-		if(scanType.equals(ShengtongScanType.SIGNED)) {
+		if(scanType.equals(ShentongScanType.SIGNED)) {
 			super.setStatus(ExpressStateEnum.SIGNED.getValue());
 			return;
 		}
 		/**
 		 * 正在派送途中
 		 */
-		if(scanType.equals(ShengtongScanType.DELIVERING)) {
+		if(scanType.equals(ShentongScanType.DELIVERING)) {
 			super.setStatus(ExpressStateEnum.DELIVERING.getValue());
 			return;
 		}
 		/**
 		 * 代理收件
 		 */
-		if(scanType.equals(ShengtongScanType.AGENT)) {
+		if(scanType.equals(ShentongScanType.AGENT)) {
 			super.setStatus(ExpressStateEnum.AGENT.getValue());
 			return;
 		}
