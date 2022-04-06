@@ -1,5 +1,6 @@
 package net.kdks.handler;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
@@ -12,6 +13,7 @@ import net.kdks.model.ExpressPriceResult;
 import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import net.kdks.model.OrderResult;
+import net.kdks.utils.Assert;
 
 /**
  * 业务处理.
@@ -33,11 +35,23 @@ public class ExpressHandlers {
      * @param expressConfig 快递配置
      */
     public ExpressHandlers(ExpressConfig expressConfig) {
-        expressHandlers.put("STO", new ExpressShentongHandler(expressConfig.getShentongConfig()));
-        expressHandlers.put("YTO", new ExpressYuantongHandler(expressConfig.getYuantongConfig()));
-        expressHandlers.put("ZTO", new ExpressZhongtongHandler(expressConfig.getZhongtongConfig()));
-        expressHandlers.put("HTKY", new ExpressBaishiHandler(expressConfig.getBaishiConfig()));
-        expressHandlers.put("SF", new ExpressShunfengHandler(expressConfig.getShunfengConfig()));
+        List<ExpressHandler> expressHandlerList = new ArrayList<>();
+        if (expressConfig.getShentongConfig() != null) {
+            expressHandlerList.add(new ExpressShentongHandler(expressConfig.getShentongConfig()));
+        }
+        if (expressConfig.getYuantongConfig() != null) {
+            expressHandlerList.add(new ExpressYuantongHandler(expressConfig.getYuantongConfig()));
+        }
+        if (expressConfig.getZhongtongConfig() != null) {
+            expressHandlerList.add(new ExpressZhongtongHandler(expressConfig.getZhongtongConfig()));
+        }
+        if (expressConfig.getBaishiConfig() != null) {
+            expressHandlerList.add(new ExpressBaishiHandler(expressConfig.getBaishiConfig()));
+        }
+        if (expressConfig.getShunfengConfig() != null) {
+            expressHandlerList.add(new ExpressShunfengHandler(expressConfig.getShunfengConfig()));
+        }
+        addLogisticsHandlers(expressHandlerList);
     }
 
     /**
@@ -76,6 +90,24 @@ public class ExpressHandlers {
     }
 
     /**
+     * Adds express handlers.
+     *
+     * @param expressHandlers express handler collection
+     * @return current express handlers
+     */
+    public ExpressHandlers addLogisticsHandlers(Collection<ExpressHandler> expressHandlers) {
+        if (expressHandlers != null && expressHandlers.size() > 0) {
+            for (ExpressHandler handler : expressHandlers) {
+                if (this.expressHandlers.containsKey(handler.getExpressCompanyCode())) {
+                    System.out.println("Same express company code implements must be unique");
+                }
+                this.expressHandlers.put(handler.getExpressCompanyCode(), handler);
+            }
+        }
+        return this;
+    }
+
+    /**
      * get supported code.
      *
      * @param code express company code
@@ -84,6 +116,7 @@ public class ExpressHandlers {
     private ExpressHandler getSupportedCode(String code) {
         ExpressHandler handler = expressHandlers.getOrDefault(code,
             expressHandlers.get(ExpressCompanyCodeEnum.STO.getValue()));
+        Assert.notNull(handler, "不支持的快递公司！");
         return handler;
     }
 }
