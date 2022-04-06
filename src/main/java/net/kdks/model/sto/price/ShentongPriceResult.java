@@ -6,14 +6,14 @@ import net.kdks.model.sto.ShentongBaseResult;
 
 /**
  * 申通运费预估结果.
- * 
+ *
  * @author Ze.Wang
  * @since 0.0.7
  */
 @Data
 @EqualsAndHashCode(callSuper = true)
 public class ShentongPriceResult extends ShentongBaseResult {
-	
-	private ShentongPriceData data;
+
+    private ShentongPriceData data;
 
 }

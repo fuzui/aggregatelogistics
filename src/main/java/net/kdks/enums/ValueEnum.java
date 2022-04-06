@@ -5,7 +5,7 @@ import java.util.stream.Stream;
 
 /**
  * 枚举接口.
- * 
+ *
  * @author Ze.Wang
  * @since 0.0.1
  */
@@ -23,9 +23,9 @@ public interface ValueEnum<T> {
     static <V, E extends ValueEnum<V>> E valueToEnum(Class<E> enumType, V value) {
 
         return Stream.of(enumType.getEnumConstants())
-                .filter(item -> item.getValue().equals(value))
-                .findFirst()
-                .orElseThrow(() -> new IllegalArgumentException("unknown value: " + value));
+            .filter(item -> item.getValue().equals(value))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("unknown value: " + value));
     }
 
     /**

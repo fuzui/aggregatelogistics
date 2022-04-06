@@ -1,6 +1,7 @@
 /**
- * 申通轨迹查询结果
- * 
+ * 申通轨迹查询结果.
+ *
  * @author Ze.Wang
  */
+
 package net.kdks.model.sto;
