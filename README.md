@@ -1,8 +1,9 @@
 <p align="center">
  <img src="https://gitee.com/fuzui/aggregatelogistics/badge/star.svg?theme=dark" alt="Build Status">
  <img src="https://img.shields.io/github/stars/fuzui/aggregatelogistics.svg?style=social" alt="Build Status">
- <img src="https://img.shields.io/badge/aggregatelogistics-0.0.6-brightgreen" alt="Build Status">
+ <img src="https://img.shields.io/badge/aggregatelogistics-0.0.8-brightgreen" alt="Build Status">
 </p>
+
 
 # 聚合物流(aggregatelogistics)
 
@@ -18,7 +19,7 @@
 
   当前支持顺丰、中通、申通、圆通、百世、极兔；
 
-* 运单轨迹查询：
+* 运费及实效查询：
 
   当前支持中通、申通、圆通、极兔；
 
@@ -34,16 +35,16 @@
 
   ```xml
   <dependency>
-  	<groupId>net.kdks</groupId>
-  	<artifactId>aggregatelogistics</artifactId>
-  	<version>0.0.6</version>
+      <groupId>net.kdks</groupId>
+      <artifactId>aggregatelogistics</artifactId>
+      <version>0.0.8</version>
   </dependency>
   ```
 
 * Gradle
 
   ```
-  compile 'net.kdks:aggregatelogistics:0.0.6'
+  compile 'net.kdks:aggregatelogistics:0.0.8'
   ```
 
 ## 2. 调用
@@ -62,7 +63,7 @@ ExpressConfig config=ExpressConfig.builder()
   .yuantongConfig("appkey", "secretKey", "userId", 1)
   // 中通配置
   .zhongtongConfig("companyId", "secretKey", 1)
-  // 中通配置
+  // 极兔配置
   .jituConfig("apiAccount", "privateKey", "uuid", "customerCode", "customerPwd", 1)
   .build();
 ExpressHandlers expressHandlers=new ExpressHandlers(config);
@@ -71,15 +72,22 @@ String expressCompanyNo="SF";
 // 轨迹查询参数
 ExpressParam param=new ExpressParam();
 // 单号必传
-param.setExpressNo("SF1028911111316");
+List<String> expressNo = new ArrayList<>();
+expressNo.add("SF1028911111316");
+param.setExpressNos(expressNo);
 // 手机号,顺丰必填(全11位或后4位)
 param.setMobile("0728");
 // 调用运单轨迹查询
-ExpressResponse<ExpressResult> expressResult=expressHandlers.getExpressInfo(param,"SF");
+ExpressResponse<ExpressResult> expressResult=expressHandlers.getExpressInfo(param, "SF");
+
+// 运费及实效查询参数，此处省略赋值，具体查看net.kdks.model.ExpressPriceParam
+ExpressPriceParam expressPriceParam = new ExpressPriceParam();
+ExpressResponse<ExpressPriceResult> result = expressHandlers.getExpressPrice(expressPriceParam, "STO");
+
 // 下单参数，此处省略赋值，具体查看net.kdks.model.CreateOrderParam
 CreateOrderParam createOrderParam=new CreateOrderParam();
 // 调用下单
-ExpressResponse<OrderResult> orderResult=expressHandlers.createOrder(createOrderParam,"SF");
+ExpressResponse<OrderResult> orderResult=expressHandlers.createOrder(createOrderParam, "SF");
 ```
 
 
