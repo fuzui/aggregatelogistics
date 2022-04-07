@@ -30,6 +30,7 @@ import net.kdks.model.sf.WaybillNoInfo;
 import net.kdks.utils.DateUtils;
 import net.kdks.utils.DigestUtils;
 import net.kdks.utils.MapUtils;
+import net.kdks.utils.StringUtils;
 
 /**
  * 顺丰.
@@ -54,11 +55,16 @@ public class ExpressShunfengHandler implements ExpressHandler {
      */
     @Override
     public ExpressResponse<List<ExpressResult>> getExpressInfo(ExpressParam expressParam) {
+        String mobile = expressParam.getMobile().trim();
+        if (StringUtils.isEmpty(mobile) || mobile.length() < 4) {
+            return ExpressResponse.failed("请输入手机号后四位");
+        }
+        mobile = mobile.substring(mobile.length() - 4);
         String requestUrl = getRequestUrl();
         String serviceCode = "EXP_RECE_SEARCH_ROUTES";
         Map<String, Object> paramItemsMap = new HashMap<>(5);
         List<String> expressNos = expressParam.getExpressNos();
-        paramItemsMap.put("checkPhoneNo", expressParam.getMobile());
+        paramItemsMap.put("checkPhoneNo", mobile);
         paramItemsMap.put("methodType", "1");
         paramItemsMap.put("trackingType", "1");
         paramItemsMap.put("language", "0");
