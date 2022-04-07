@@ -31,6 +31,7 @@ public class ExpressConfig {
         baishiConfig = builder.baishiConfig;
         yuantongConfig = builder.yuantongConfig;
         zhongtongConfig = builder.zhongtongConfig;
+        jituConfig = builder.jituConfig;
     }
 
     private ShunfengConfig shunfengConfig;
@@ -42,6 +43,8 @@ public class ExpressConfig {
     private YuantongConfig yuantongConfig;
 
     private ZhongtongConfig zhongtongConfig;
+
+    private JituConfig jituConfig;
 
     public static Builder builder() {
         return new Builder();
@@ -60,6 +63,8 @@ public class ExpressConfig {
         private YuantongConfig yuantongConfig;
 
         private ZhongtongConfig zhongtongConfig;
+
+        private JituConfig jituConfig;
 
         /**
          * 顺丰.
@@ -206,6 +211,74 @@ public class ExpressConfig {
         public Builder zhongtongConfig(String companyId, String secretKey, int isProduct) {
             this.zhongtongConfig =
                 ZhongtongConfig.builder().companyId(companyId).secretKey(secretKey)
+                    .isProduct(isProduct)
+                    .build();
+            return this;
+        }
+
+        /**
+         * 极兔.
+         *
+         * @param apiAccount apiAccount
+         * @param privateKey privateKey
+         * @return Builder
+         */
+        public Builder jiituConfig(String apiAccount, String privateKey) {
+            this.jituConfig =
+                JituConfig.builder().apiAccount(apiAccount).privateKey(privateKey).build();
+            return this;
+        }
+
+        /**
+         * 极兔.
+         *
+         * @param apiAccount apiAccount
+         * @param privateKey privateKey
+         * @param isProduct  isProduct
+         * @return Builder
+         */
+        public Builder jituConfig(String apiAccount, String privateKey, int isProduct) {
+            this.jituConfig =
+                JituConfig.builder().apiAccount(apiAccount).privateKey(privateKey)
+                    .isProduct(isProduct)
+                    .build();
+            return this;
+        }
+
+        /**
+         * 极兔.
+         *
+         * @param apiAccount apiAccount
+         * @param privateKey privateKey
+         * @param uuid       uuid
+         * @param isProduct  isProduct
+         * @return Builder
+         */
+        public Builder jituConfig(String apiAccount, String privateKey, String uuid,
+                                   int isProduct) {
+            this.jituConfig =
+                JituConfig.builder().apiAccount(apiAccount).privateKey(privateKey).uuid(uuid)
+                    .isProduct(isProduct)
+                    .build();
+            return this;
+        }
+
+        /**
+         * 极兔.
+         *
+         * @param apiAccount   apiAccount
+         * @param privateKey   privateKey
+         * @param uuid         uuid
+         * @param customerCode customerCode
+         * @param customerPwd  customerPwd
+         * @param isProduct    isProduct
+         * @return Builder
+         */
+        public Builder jituConfig(String apiAccount, String privateKey, String uuid,
+                                   String customerCode, String customerPwd, int isProduct) {
+            this.jituConfig =
+                JituConfig.builder().apiAccount(apiAccount).privateKey(privateKey).uuid(uuid)
+                    .customerCode(customerCode).customerPwd(customerPwd)
                     .isProduct(isProduct)
                     .build();
             return this;

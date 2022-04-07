@@ -10,6 +10,12 @@ import net.kdks.model.ExpressResponse;
 import net.kdks.model.ExpressResult;
 import org.junit.Test;
 
+/**
+ * 物流轨迹测试.
+ *
+ * @author Ze.Wang
+ * @since 0.0.8
+ */
 public class ExpressInfoTest {
 
     private final ExpressHandlers expressHandlers = new ExpressHandlers(InitConfig.getConfig());
@@ -82,6 +88,20 @@ public class ExpressInfoTest {
         expressParam.setExpressNos(expressNo);
         ExpressResponse<List<ExpressResult>> result =
             expressHandlers.getExpressInfo(expressParam, ExpressCompanyCodeEnum.HTKY.getValue());
+        System.out.println(JSON.toJSONString(result));
+    }
+
+    /**
+     * 极兔.
+     */
+    @Test
+    public void jt() {
+        ExpressParam expressParam = new ExpressParam();
+        List<String> expressNo = new ArrayList<>();
+        expressNo.add("UT0000352320970");
+        expressParam.setExpressNos(expressNo);
+        ExpressResponse<List<ExpressResult>> result =
+            expressHandlers.getExpressInfo(expressParam, ExpressCompanyCodeEnum.JT.getValue());
         System.out.println(JSON.toJSONString(result));
     }
 }

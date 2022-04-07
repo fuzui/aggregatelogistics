@@ -40,7 +40,12 @@ public enum ExpressCompanyCodeEnum implements ValueEnum<String> {
     /**
      * 德邦.
      */
-    DBL("DBL");
+    DBL("DBL"),
+
+    /**
+     * 极兔.
+     */
+    JT("JT");
 
     private final String value;
 

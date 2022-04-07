@@ -51,6 +51,9 @@ public class ExpressHandlers {
         if (expressConfig.getShunfengConfig() != null) {
             expressHandlerList.add(new ExpressShunfengHandler(expressConfig.getShunfengConfig()));
         }
+        if (expressConfig.getJituConfig() != null) {
+            expressHandlerList.add(new ExpressJituHandler(expressConfig.getJituConfig()));
+        }
         addLogisticsHandlers(expressHandlerList);
     }
 

@@ -54,6 +54,20 @@ public class InitConfig {
                 bundle.getString("express.zto.secretKey"),
                 Integer.parseInt(bundle.getString("express.zto.isProduct")));
         }
+        if (bundle.containsKey("express.jt.apiAccount") &&
+            bundle.containsKey("express.jt.privateKey")
+            && bundle.containsKey("express.jt.isProduct")) {
+            configBuild.jituConfig(bundle.getString("express.jt.apiAccount"),
+                bundle.getString("express.jt.privateKey"),
+                bundle.getString("express.jt.uuid"),
+                Integer.parseInt(bundle.getString("express.jt.isProduct")));
+            configBuild.jituConfig(bundle.getString("express.jt.apiAccount"),
+                bundle.getString("express.jt.privateKey"),
+                bundle.getString("express.jt.uuid"),
+                bundle.getString("express.jt.customerCode"),
+                bundle.getString("express.jt.customerPwd"),
+                Integer.parseInt(bundle.getString("express.jt.isProduct")));
+        }
         return configBuild.build();
     }
 }

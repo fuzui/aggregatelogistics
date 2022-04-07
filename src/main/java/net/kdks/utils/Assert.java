@@ -18,4 +18,16 @@ public class Assert {
             throw new IllegalArgumentException(message);
         }
     }
+
+    /**
+     * 判断字符串是否为空.
+     *
+     * @param str 判断的对象
+     * @param message 错误消息
+     */
+    public static void notEmpty(String str, String message) {
+        if (StringUtils.isEmpty(str)) {
+            throw new IllegalArgumentException(message);
+        }
+    }
 }
