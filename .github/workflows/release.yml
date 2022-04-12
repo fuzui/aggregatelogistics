@@ -5,7 +5,7 @@ on:
   release:
     types: [released]
 jobs:
-  deploy:
+  release:
     runs-on: ubuntu-latest
 
     steps:
