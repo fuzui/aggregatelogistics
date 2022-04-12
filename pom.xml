@@ -105,7 +105,8 @@
                     <serverId>sonatype_releases</serverId>
                     <nexusUrl>https://oss.sonatype.org/</nexusUrl>
                     <!-- 如果希望发布后自动执行close和release操作，此处可以调整为true -->
-                    <autoReleaseAfterClose>false</autoReleaseAfterClose>
+                    <autoReleaseAfterClose>true</autoReleaseAfterClose>
+                    <stagingProgressTimeoutMinutes>60</stagingProgressTimeoutMinutes>
                 </configuration>
             </plugin>
 
