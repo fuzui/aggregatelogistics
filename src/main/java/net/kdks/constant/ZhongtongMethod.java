@@ -1,7 +1,7 @@
 package net.kdks.constant;
 
 /**
- * 圆通路由状态.
+ * 中通路由状态.
  *
  * @author Ze.Wang
  * @since 0.0.1
