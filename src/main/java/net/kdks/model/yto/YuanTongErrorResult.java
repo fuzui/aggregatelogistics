@@ -21,4 +21,6 @@ public class YuanTongErrorResult {
 
     private String message;
 
+    private String reason;
+
 }

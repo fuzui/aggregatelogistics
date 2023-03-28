@@ -26,6 +26,7 @@ import net.kdks.model.OrderResult;
 import net.kdks.model.yto.YuanTongErrorResult;
 import net.kdks.model.yto.YuanTongResult;
 import net.kdks.request.YuantongRequest;
+import net.kdks.utils.StringUtils;
 
 /**
  * 圆通.
@@ -121,9 +122,11 @@ public class ExpressYuantongHandler implements ExpressHandler {
                 String result =
                     responseData.substring(strStartIndex, strEndIndex)
                         .substring(messageStart.length());
-                errorResult.setMessage(result);
+                errorResult.setReason(result);
             }
-            expressResult.setMsg(errorResult.getMessage());
+            expressResult.setMsg(
+                StringUtils.isNotEmpty(errorResult.getMessage()) ? errorResult.getMessage() :
+                    errorResult.getReason());
             return expressResult;
         }
     }
@@ -161,13 +164,20 @@ public class ExpressYuantongHandler implements ExpressHandler {
             expressPriceResult.setPrice(price);
             return ExpressResponse.ok(expressPriceResult);
         } catch (NumberFormatException e) {
-            String messageStart = "<reason>";
-            String messageEnd = "</reason>";
-            int strStartIndex = responseData.indexOf(messageStart);
-            int strEndIndex = responseData.indexOf(messageEnd);
-            String result =
-                responseData.substring(strStartIndex, strEndIndex).substring(messageStart.length());
-            return ExpressResponse.failed(result);
+            try {
+                YuanTongErrorResult errorResult =
+                    JSON.parseObject(responseData, YuanTongErrorResult.class);
+                return ExpressResponse.failed(errorResult.getReason());
+            } catch (JSONException e2) {
+                String messageStart = "<reason>";
+                String messageEnd = "</reason>";
+                int strStartIndex = responseData.indexOf(messageStart);
+                int strEndIndex = responseData.indexOf(messageEnd);
+                String result =
+                    responseData.substring(strStartIndex, strEndIndex)
+                        .substring(messageStart.length());
+                return ExpressResponse.failed(result);
+            }
         }
     }
 
