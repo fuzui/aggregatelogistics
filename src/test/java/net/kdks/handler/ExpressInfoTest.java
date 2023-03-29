@@ -27,7 +27,7 @@ public class ExpressInfoTest {
     public void zto() {
         ExpressParam expressParam = new ExpressParam();
         List<String> expressNo = new ArrayList<>();
-        expressNo.add("73177487726227");
+        expressNo.add("73100059800035");
         expressParam.setExpressNos(expressNo);
         ExpressResponse<List<ExpressResult>> result =
             expressHandlers.getExpressInfo(expressParam, "ZTO");

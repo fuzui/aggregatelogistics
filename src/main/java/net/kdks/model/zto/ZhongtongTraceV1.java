@@ -10,19 +10,17 @@ import net.kdks.utils.DateUtils;
  * 路由信息.
  *
  * @author Ze.Wang
- * @since 1.0.0
+ * @since 0.0.1
  */
 @ToString
-public class ZhongtongTrace extends ExpressData {
-    private static final long serialVersionUID = 1L;
-
-    public void setScanCity(ZhongtongScanSite scanSite) {
-        super.setAreaName(scanSite.getName());
+public class ZhongtongTraceV1 extends ExpressData {
+    public void setScanCity(String scanCity) {
+        super.setAreaName(scanCity);
     }
 
-    public void setScanDate(Long scanDate) {
-        super.setTime(DateUtils.millisToSeconds(scanDate));
-        super.setFtime(DateUtils.millLongToDateStr(scanDate));
+    public void setScanDate(String scanDate) {
+        super.setTime(DateUtils.strToTimestamp(scanDate));
+        super.setFtime(scanDate);
     }
 
     public void setDesc(String desc) {

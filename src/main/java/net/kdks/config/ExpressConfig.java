@@ -208,9 +208,11 @@ public class ExpressConfig {
          * @param isProduct isProduct
          * @return Builder
          */
-        public Builder zhongtongConfig(String companyId, String secretKey, int isProduct) {
+        public Builder zhongtongConfig(String companyId, String secretKeyV1, String appKey,
+                                       String secretKey, String routeVersion, int isProduct) {
             this.zhongtongConfig =
-                ZhongtongConfig.builder().companyId(companyId).secretKey(secretKey)
+                ZhongtongConfig.builder().companyId(companyId).secretKeyV1(secretKeyV1)
+                    .appKey(appKey).secretKey(secretKey).routeVersion(routeVersion)
                     .isProduct(isProduct)
                     .build();
             return this;
@@ -255,7 +257,7 @@ public class ExpressConfig {
          * @return Builder
          */
         public Builder jituConfig(String apiAccount, String privateKey, String uuid,
-                                   int isProduct) {
+                                  int isProduct) {
             this.jituConfig =
                 JituConfig.builder().apiAccount(apiAccount).privateKey(privateKey).uuid(uuid)
                     .isProduct(isProduct)
@@ -275,7 +277,7 @@ public class ExpressConfig {
          * @return Builder
          */
         public Builder jituConfig(String apiAccount, String privateKey, String uuid,
-                                   String customerCode, String customerPwd, int isProduct) {
+                                  String customerCode, String customerPwd, int isProduct) {
             this.jituConfig =
                 JituConfig.builder().apiAccount(apiAccount).privateKey(privateKey).uuid(uuid)
                     .customerCode(customerCode).customerPwd(customerPwd)

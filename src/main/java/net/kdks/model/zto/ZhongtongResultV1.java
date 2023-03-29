@@ -1,21 +1,25 @@
 package net.kdks.model.zto;
 
+import java.util.List;
 import lombok.Data;
 
 /**
  * 中通轨迹查询结果.
  *
  * @author Ze.Wang
- * @since 1.0.0
+ * @since 0.0.1
  */
 @Data
-public class ZhongtongResult<T> {
+public class ZhongtongResultV1 {
 
     /**
      * 数据.
      */
-    private T result;
-
+    private List<ZhongtongData> data;
+    /**
+     * 信息.
+     */
+    private String msg;
     /**
      * 是否成功.
      */
@@ -24,7 +28,5 @@ public class ZhongtongResult<T> {
      * 错误信息.
      */
     private String message;
-
-    private String statusCode;
 
 }

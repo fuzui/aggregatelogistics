@@ -1,11 +1,13 @@
 package net.kdks.utils;
 
+import java.text.SimpleDateFormat;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.OffsetDateTime;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoField;
+import java.util.Date;
 
 /**
  * 日期时间处理.
@@ -58,6 +60,10 @@ public class DateUtils {
         return currentTimes().getLong(ChronoField.INSTANT_SECONDS);
     }
 
+    public static long millisToSeconds(Long millis) {
+        return millis / 1000;
+    }
+
     /**
      * 字符串时间转时间戳.
      *
@@ -67,6 +73,50 @@ public class DateUtils {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         LocalDateTime localDateTime = LocalDateTime.parse(date, dateTimeFormatter);
         return localDateTime.toInstant(ZoneOffset.ofHours(8)).getEpochSecond();
+    }
+
+    /**
+     * 毫秒转日期字符串.
+     *
+     * @param millSec 毫秒
+     * @param dateFormat 格式
+     * @return 日期字符串
+     */
+    public static String millLongToDateStr(Long millSec, String dateFormat) {
+        SimpleDateFormat sdf = new SimpleDateFormat(dateFormat);
+        Date date = new Date(millSec);
+        return sdf.format(date);
+    }
+
+    /**
+     * 毫秒转日期字符串.
+     *
+     * @param millSec 毫秒
+     * @return 日期字符串
+     */
+    public static String millLongToDateStr(Long millSec) {
+        return millLongToDateStr(millSec, DEFAULT_FORMAT);
+    }
+
+    /**
+     * 秒转日期字符串.
+     *
+     * @param sec 秒
+     * @param dateFormat 格式
+     * @return 日期字符串
+     */
+    public static String secondLongToDateStr(Long sec, String dateFormat) {
+        return millLongToDateStr(sec * 1000L, dateFormat);
+    }
+
+    /**
+     * 秒转日期字符串.
+     *
+     * @param sec 秒
+     * @return 日期字符串
+     */
+    public static String secondLongToDateStr(Long sec) {
+        return secondLongToDateStr(sec, DEFAULT_FORMAT);
     }
 
     /**

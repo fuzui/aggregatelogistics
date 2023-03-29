@@ -51,7 +51,10 @@ public class InitConfig {
             bundle.containsKey("express.zto.secretKey")
             && bundle.containsKey("express.zto.isProduct")) {
             configBuild.zhongtongConfig(bundle.getString("express.zto.companyId"),
+                bundle.getString("express.zto.secretKeyV1"),
+                bundle.getString("express.zto.appKey"),
                 bundle.getString("express.zto.secretKey"),
+                bundle.getString("express.zto.routeVersion"),
                 Integer.parseInt(bundle.getString("express.zto.isProduct")));
         }
         if (bundle.containsKey("express.jt.apiAccount") &&

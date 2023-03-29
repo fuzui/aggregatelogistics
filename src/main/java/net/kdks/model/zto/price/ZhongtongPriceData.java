@@ -10,14 +10,11 @@ import lombok.Data;
  */
 @Data
 public class ZhongtongPriceData {
+
     /**
-     * 续重.
+     * 运费.
      */
-    private String addMoney;
-    /**
-     * 首重.
-     */
-    private String firstMoney;
+    private String price;
     /**
      * 时效.
      */
