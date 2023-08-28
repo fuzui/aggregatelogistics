@@ -104,4 +104,18 @@ public class ExpressInfoTest {
             expressHandlers.getExpressInfo(expressParam, ExpressCompanyCodeEnum.JT.getValue());
         System.out.println(JSON.toJSONString(result));
     }
+
+    /**
+     * 韵达.
+     */
+    @Test
+    public void yd() {
+        ExpressParam expressParam = new ExpressParam();
+        List<String> expressNo = new ArrayList<>();
+        expressNo.add("");
+        expressParam.setExpressNos(expressNo);
+        ExpressResponse<List<ExpressResult>> result =
+            expressHandlers.getExpressInfo(expressParam, ExpressCompanyCodeEnum.YD.getValue());
+        System.out.println(JSON.toJSONString(result));
+    }
 }

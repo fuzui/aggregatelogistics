@@ -71,6 +71,13 @@ public class InitConfig {
                 bundle.getString("express.jt.customerPwd"),
                 Integer.parseInt(bundle.getString("express.jt.isProduct")));
         }
+        if (bundle.containsKey("express.yd.appKey") &&
+            bundle.containsKey("express.yd.appSecret")
+            && bundle.containsKey("express.yd.isProduct")) {
+            configBuild.yundaConfig(bundle.getString("express.yd.appKey"),
+                bundle.getString("express.yd.appSecret"),
+                Integer.parseInt(bundle.getString("express.jt.isProduct")));
+        }
         return configBuild.build();
     }
 }

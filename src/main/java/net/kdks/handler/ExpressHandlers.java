@@ -54,6 +54,9 @@ public class ExpressHandlers {
         if (expressConfig.getJituConfig() != null) {
             expressHandlerList.add(new ExpressJituHandler(expressConfig.getJituConfig()));
         }
+        if (expressConfig.getYundaConfig() != null) {
+            expressHandlerList.add(new ExpressYundaHandler(expressConfig.getYundaConfig()));
+        }
         addLogisticsHandlers(expressHandlerList);
     }
 

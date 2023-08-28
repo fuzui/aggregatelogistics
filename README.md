@@ -7,7 +7,7 @@
 
 # 聚合物流(aggregatelogistics)
 
-它是一个聚合各物流公司开放平台的**Java工具类库**，为解决公司电商项目集成物流而生。
+它是一个聚合多家物流公司开放平台的**Java工具类库**，为解决公司电商项目集成物流而生。
 
 当前已聚合顺丰、中通、申通、圆通、百世、极兔。
 
@@ -17,7 +17,7 @@
 
 * 运单轨迹查询：
 
-  当前支持顺丰、中通、申通、圆通、百世、极兔；
+  当前支持顺丰、中通、申通、圆通、百世、极兔、韵达；
 
 * 运费及实效查询：
 
@@ -37,7 +37,7 @@
   <dependency>
       <groupId>net.kdks</groupId>
       <artifactId>aggregatelogistics</artifactId>
-      <version>0.0.8</version>
+      <version>0.0.9</version>
   </dependency>
   ```
 
@@ -57,14 +57,14 @@ ExpressConfig config=ExpressConfig.builder()
   .shunfengConfig("partnerId", "requestId", "checkWord", 1)
   // 申通配置
   .shentongConfig("appkey","secretKey",1)
-  // 百世配置
-  .baishiConfig("partnerId","secretKey",1)
   // 圆通配置
   .yuantongConfig("appkey", "secretKey", "userId", 1)
   // 中通配置
-  .zhongtongConfig("companyId", "secretKey", 1)
+  .zhongtongConfig("companyId", "secretKey", "companyId", "secretKey", "routeVersioon", 1)
   // 极兔配置
   .jituConfig("apiAccount", "privateKey", "uuid", "customerCode", "customerPwd", 1)
+  // 韵达配置
+  .yundaConfig("appKey", "appSecret", 1)
   .build();
 ExpressHandlers expressHandlers=new ExpressHandlers(config);
 // 快递公司编号，具体查看net.kdks.enums.ExpressCompanyCodeEnum
@@ -92,33 +92,13 @@ ExpressResponse<OrderResult> orderResult=expressHandlers.createOrder(createOrder
 
 
 
-## 3. 参数申请(待完善步骤)
+## 3. 文档
 
 > 提示：多数都需要企业认证，即营业执照(公司或个体工商户)。所以个人用户难以配置并使用该类库。
 
-* 顺丰
+* [Github wiki](https://github.com/fuzui/aggregatelogistics/wiki)
 
-  [顺丰开放平台](http://qiao.sf-express.com/)
-
-* 申通
-
-  [申通开放平台](https://open.sto.cn/)
-
-* 圆通
-
-  [圆通开放平台](http://open.yto.net.cn/)
-
-* 中通
-
-  [中通开放平台](https://zop.zto.com/)
-
-* 百世
-
-  [百世开放平台](https://open.800best.com/)
-
-* 极兔
-
-  [极兔开放平台](https://open.jtexpress.com.cn/)
+* [Gitee wiki](https://gitee.com/fuzui/aggregatelogistics/wikis/Home)
 
 # 示例
 

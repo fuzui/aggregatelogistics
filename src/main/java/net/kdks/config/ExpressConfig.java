@@ -11,9 +11,10 @@ import lombok.NoArgsConstructor;
  * ExpressConfig config = ExpressConfig.builder()
  * .shunfengConfig("partnerId","requestId","checkWord",1)
  * .shentongConfig("appkey", "secretKey", 1)
- * .baishiConfig("partnerId", "secretKey", 1)
  * .yuantongConfig("appkey", "secretKey", "userId")
  * .zhongtongConfig("companyId", "secretKey", 0)
+ * .jituConfig("apiAccount", "privateKey", "uuid", "customerCode", "customerPwd", 1)
+ * .yundaConfig("appKey", "appSecret", 1)
  * .build();
  * ExpressHandlers expressHandlers = new ExpressHandlers(config);
  * </pre>
@@ -32,6 +33,7 @@ public class ExpressConfig {
         yuantongConfig = builder.yuantongConfig;
         zhongtongConfig = builder.zhongtongConfig;
         jituConfig = builder.jituConfig;
+        yundaConfig = builder.yundaConfig;
     }
 
     private ShunfengConfig shunfengConfig;
@@ -45,6 +47,8 @@ public class ExpressConfig {
     private ZhongtongConfig zhongtongConfig;
 
     private JituConfig jituConfig;
+
+    private YundaConfig yundaConfig;
 
     public static Builder builder() {
         return new Builder();
@@ -65,6 +69,8 @@ public class ExpressConfig {
         private ZhongtongConfig zhongtongConfig;
 
         private JituConfig jituConfig;
+
+        private YundaConfig yundaConfig;
 
         /**
          * 顺丰.
@@ -281,6 +287,22 @@ public class ExpressConfig {
             this.jituConfig =
                 JituConfig.builder().apiAccount(apiAccount).privateKey(privateKey).uuid(uuid)
                     .customerCode(customerCode).customerPwd(customerPwd)
+                    .isProduct(isProduct)
+                    .build();
+            return this;
+        }
+
+        /**
+         * 韵达.
+         *
+         * @param appKey   appKey
+         * @param appSecret   appSecret
+         * @param isProduct    isProduct
+         * @return Builder
+         */
+        public Builder yundaConfig(String appKey, String appSecret, int isProduct) {
+            this.yundaConfig =
+                YundaConfig.builder().appKey(appKey).appSecret(appSecret)
                     .isProduct(isProduct)
                     .build();
             return this;
