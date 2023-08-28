@@ -1,7 +1,7 @@
 <p align="center">
  <img src="https://gitee.com/fuzui/aggregatelogistics/badge/star.svg?theme=dark" alt="Build Status">
  <img src="https://img.shields.io/github/stars/fuzui/aggregatelogistics.svg?style=social" alt="Build Status">
- <img src="https://img.shields.io/badge/aggregatelogistics-0.0.8-brightgreen" alt="Build Status">
+ <img src="https://img.shields.io/badge/aggregatelogistics-0.0.9-brightgreen" alt="Build Status">
 </p>
 
 
@@ -44,7 +44,7 @@
 * Gradle
 
   ```
-  compile 'net.kdks:aggregatelogistics:0.0.8'
+  compile 'net.kdks:aggregatelogistics:0.0.9'
   ```
 
 ## 2. 调用
