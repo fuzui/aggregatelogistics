@@ -75,7 +75,7 @@ ExpressParam param=new ExpressParam();
 List<String> expressNo = new ArrayList<>();
 expressNo.add("SF1028911111316");
 param.setExpressNos(expressNo);
-// 手机号,顺丰必填(全11位或后4位)
+// 手机号,顺丰必填(全11位或后4位),中通未绑定面单账号情况下必填
 param.setMobile("0728");
 // 调用运单轨迹查询
 ExpressResponse<ExpressResult> expressResult=expressHandlers.getExpressInfo(param, "SF");
