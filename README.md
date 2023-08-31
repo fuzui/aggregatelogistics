@@ -1,7 +1,7 @@
 <p align="center">
  <img src="https://gitee.com/fuzui/aggregatelogistics/badge/star.svg?theme=dark" alt="Build Status">
  <img src="https://img.shields.io/github/stars/fuzui/aggregatelogistics.svg?style=social" alt="Build Status">
- <img src="https://img.shields.io/badge/aggregatelogistics-0.0.9-brightgreen" alt="Build Status">
+ <img src="https://img.shields.io/badge/aggregatelogistics-0.0.10-brightgreen" alt="Build Status">
 </p>
 
 
@@ -37,14 +37,14 @@
   <dependency>
       <groupId>net.kdks</groupId>
       <artifactId>aggregatelogistics</artifactId>
-      <version>0.0.9</version>
+      <version>0.0.10</version>
   </dependency>
   ```
 
 * Gradle
 
   ```
-  compile 'net.kdks:aggregatelogistics:0.0.9'
+  compile 'net.kdks:aggregatelogistics:0.0.10'
   ```
 
 ## 2. 调用
