@@ -60,8 +60,9 @@ public class ExpressZhongtongHandler implements ExpressHandler {
         }
         List<ExpressResult> expressResults = new ArrayList<>();
         for (String expressNo : expressParam.getExpressNos()) {
-            Map<String, Object> param = MapUtils.newHashMap(1);
+            Map<String, Object> param = MapUtils.newHashMap(2);
             param.put("billCode", expressNo);
+            param.put("mobilePhone", expressParam.getMobile());
             String responseData = zhongtongRequest.queryRouteRequest(JSON.toJSONString(param),
                 expressParam.getFormat());
             ExpressResult expressResult = disposeResult(responseData, expressNo, expressParam);
