@@ -34,6 +34,7 @@ public class ExpressConfig {
         zhongtongConfig = builder.zhongtongConfig;
         jituConfig = builder.jituConfig;
         yundaConfig = builder.yundaConfig;
+        jingdongConfig = builder.jingdongConfig;
     }
 
     private ShunfengConfig shunfengConfig;
@@ -49,6 +50,8 @@ public class ExpressConfig {
     private JituConfig jituConfig;
 
     private YundaConfig yundaConfig;
+
+    private JingdongConfig jingdongConfig;
 
     public static Builder builder() {
         return new Builder();
@@ -71,6 +74,8 @@ public class ExpressConfig {
         private JituConfig jituConfig;
 
         private YundaConfig yundaConfig;
+
+        private JingdongConfig jingdongConfig;
 
         /**
          * 顺丰.
@@ -303,6 +308,26 @@ public class ExpressConfig {
         public Builder yundaConfig(String appKey, String appSecret, int isProduct) {
             this.yundaConfig =
                 YundaConfig.builder().appKey(appKey).appSecret(appSecret)
+                    .isProduct(isProduct)
+                    .build();
+            return this;
+        }
+
+        /**
+         * 京东.
+         *
+         * @param appKey   appKey
+         * @param appSecret   appSecret
+         * @param accessToken         accessToken
+         * @param isProduct    isProduct
+         * @return Builder
+         */
+        public Builder jingdongConfig(String appKey, String appSecret, String accessToken,
+                                      String customerCode, int isProduct) {
+            this.jingdongConfig =
+                JingdongConfig.builder().appKey(appKey).appSecret(appSecret)
+                    .accessToken(accessToken)
+                    .customerCode(customerCode)
                     .isProduct(isProduct)
                     .build();
             return this;

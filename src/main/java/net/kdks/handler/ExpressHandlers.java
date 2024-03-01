@@ -57,6 +57,9 @@ public class ExpressHandlers {
         if (expressConfig.getYundaConfig() != null) {
             expressHandlerList.add(new ExpressYundaHandler(expressConfig.getYundaConfig()));
         }
+        if (expressConfig.getJingdongConfig() != null) {
+            expressHandlerList.add(new ExpressJingdongHandler(expressConfig.getJingdongConfig()));
+        }
         addLogisticsHandlers(expressHandlerList);
     }
 

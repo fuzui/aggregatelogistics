@@ -118,4 +118,18 @@ public class ExpressInfoTest {
             expressHandlers.getExpressInfo(expressParam, ExpressCompanyCodeEnum.YD.getValue());
         System.out.println(JSON.toJSONString(result));
     }
+
+    /**
+     * 京东.
+     */
+    @Test
+    public void jd() {
+        ExpressParam expressParam = new ExpressParam();
+        List<String> expressNo = new ArrayList<>();
+        expressNo.add("11111111111");
+        expressParam.setExpressNos(expressNo);
+        ExpressResponse<List<ExpressResult>> result =
+            expressHandlers.getExpressInfo(expressParam, ExpressCompanyCodeEnum.JD.getValue());
+        System.out.println(JSON.toJSONString(result));
+    }
 }

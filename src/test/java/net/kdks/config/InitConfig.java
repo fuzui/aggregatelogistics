@@ -76,7 +76,19 @@ public class InitConfig {
             && bundle.containsKey("express.yd.isProduct")) {
             configBuild.yundaConfig(bundle.getString("express.yd.appKey"),
                 bundle.getString("express.yd.appSecret"),
-                Integer.parseInt(bundle.getString("express.jt.isProduct")));
+                Integer.parseInt(bundle.getString("express.yd.isProduct")));
+        }
+
+        if (bundle.containsKey("express.jd.appKey") &&
+            bundle.containsKey("express.jd.appSecret")
+            && bundle.containsKey("express.jd.accessToken")
+            && bundle.containsKey("express.jd.isProduct")
+            && bundle.containsKey("express.jd.isProduct")) {
+            configBuild.jingdongConfig(bundle.getString("express.jd.appKey"),
+                bundle.getString("express.jd.appSecret"),
+                bundle.getString("express.jd.accessToken"),
+                bundle.getString("express.jd.customerCode"),
+                Integer.parseInt(bundle.getString("express.jd.isProduct")));
         }
         return configBuild.build();
     }

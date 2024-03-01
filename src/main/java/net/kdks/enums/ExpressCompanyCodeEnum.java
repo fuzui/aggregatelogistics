@@ -45,7 +45,12 @@ public enum ExpressCompanyCodeEnum implements ValueEnum<String> {
     /**
      * 极兔.
      */
-    JT("JT");
+    JT("JT"),
+
+    /**
+     * 京东.
+     */
+    JD("JD");
 
     private final String value;
 
