@@ -1,7 +1,7 @@
 <p align="center">
  <img src="https://gitee.com/fuzui/aggregatelogistics/badge/star.svg?theme=dark" alt="Build Status">
  <img src="https://img.shields.io/github/stars/fuzui/aggregatelogistics.svg?style=social" alt="Build Status">
- <img src="https://img.shields.io/badge/aggregatelogistics-0.0.10-brightgreen" alt="Build Status">
+ <img src="https://img.shields.io/badge/aggregatelogistics-0.0.12-brightgreen" alt="Build Status">
 </p>
 
 
@@ -9,7 +9,7 @@
 
 它是一个聚合多家物流公司开放平台的**Java工具类库**，为解决公司电商项目集成物流而生。
 
-当前已聚合顺丰、中通、申通、圆通、百世、极兔。
+当前已聚合顺丰、中通、申通、圆通、百世、极兔、京东。
 
 > 提示：多数快递公司都需要企业认证，即营业执照(公司或个体工商户)。所以个人用户难以配置并使用该类库。
 
@@ -17,7 +17,7 @@
 
 * 运单轨迹查询：
 
-  当前支持顺丰、中通、申通、圆通、百世、极兔、韵达；
+  当前支持顺丰、中通、申通、圆通、百世、极兔、韵达、京东；
 
 * 运费及实效查询：
 
@@ -37,14 +37,14 @@
   <dependency>
       <groupId>net.kdks</groupId>
       <artifactId>aggregatelogistics</artifactId>
-      <version>0.0.10</version>
+      <version>0.0.12</version>
   </dependency>
   ```
 
 * Gradle
 
   ```
-  compile 'net.kdks:aggregatelogistics:0.0.10'
+  compile 'net.kdks:aggregatelogistics:0.0.12'
   ```
 
 ## 2. 调用
@@ -65,6 +65,8 @@ ExpressConfig config=ExpressConfig.builder()
   .jituConfig("apiAccount", "privateKey", "uuid", "customerCode", "customerPwd", 1)
   // 韵达配置
   .yundaConfig("appKey", "appSecret", 1)
+  // 韵达配置
+  .jingdongConfig("appKey", "appSecret", "accessToken", "customerCode", 1)
   .build();
 ExpressHandlers expressHandlers=new ExpressHandlers(config);
 // 快递公司编号，具体查看net.kdks.enums.ExpressCompanyCodeEnum
