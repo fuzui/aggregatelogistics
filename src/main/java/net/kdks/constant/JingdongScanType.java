@@ -33,6 +33,11 @@ public interface JingdongScanType {
     Integer DELIVERING = 440;
 
     /**
+     * 已签收.
+     */
+    Integer SIGNED = 510;
+
+    /**
      * 拒收.
      */
     Integer REJECTED = 530;

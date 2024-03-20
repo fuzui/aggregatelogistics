@@ -24,13 +24,13 @@ public class JingdongRouteItem extends ExpressData {
      */
     private String waybillCode;
 
-    public void setPperationTime(String operationTime) {
+    public void setOperationTime(String operationTime) {
         super.setTime(DateUtils.strToTimestamp(operationTime));
         super.setFtime(operationTime);
     }
 
-    public void setOperationTitle(String operationTitle) {
-        super.setContext(operationTitle);
+    public void setOperationRemark(String operationRemark) {
+        super.setContext(operationRemark);
     }
 
     /**
@@ -58,7 +58,10 @@ public class JingdongRouteItem extends ExpressData {
             return;
         }
         // 已签收
-        // todo: 京东的已签收状态未知
+        if (category.equals(JingdongScanType.SIGNED)) {
+            super.setStatus(ExpressStateEnum.SIGNED.getValue());
+            return;
+        }
 
         // 疑难
         if (category.equals(JingdongScanType.CANCELLED)) {
